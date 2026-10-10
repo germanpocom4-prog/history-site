@@ -5,187 +5,448 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ИсторияБел — подготовка к ЦЭ/ЦТ по истории Беларуси</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #f5f7fa; --card: #fff; --text: #1e293b; --muted: #64748b;
-    --primary: #2563eb; --primary-dark: #1e40af; --green: #16a34a;
-    --red: #dc2626; --amber: #d97706; --border: #e2e8f0; --accent: #f1f5f9;
-  }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: var(--bg); color: var(--text); line-height: 1.6;
-    padding-bottom: 60px;
-  }
-  header {
-    background: var(--primary); color: #fff; padding: 14px 24px;
-    display: flex; align-items: center; justify-content: space-between;
-    flex-wrap: wrap; gap: 12px; position: sticky; top: 0; z-index: 10;
-    box-shadow: 0 2px 8px rgba(0,0,0,.12);
-  }
-  header h1 { font-size: 1.2rem; cursor: pointer; }
-  nav { display: flex; gap: 6px; flex-wrap: wrap; }
-  nav button {
-    background: rgba(255,255,255,.15); color: #fff; border: none;
-    padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: .88rem;
-    transition: background .15s; font-family: inherit;
-  }
-  nav button:hover { background: rgba(255,255,255,.3); }
-  nav button.active { background: #fff; color: var(--primary); font-weight: 600; }
-  main { max-width: 1000px; margin: 24px auto; padding: 0 16px; }
-  .card {
-    background: var(--card); border-radius: 12px; padding: 22px;
-    box-shadow: 0 1px 3px rgba(0,0,0,.06); margin-bottom: 16px;
-  }
-  h2 { font-size: 1.4rem; margin-bottom: 12px; }
-  h3 { font-size: 1.1rem; margin: 16px 0 8px; color: var(--primary-dark); }
-  p { margin-bottom: 10px; }
-  ul, ol { padding-left: 22px; margin-bottom: 10px; }
-  li { margin-bottom: 4px; }
-  b { color: #0f172a; }
-  .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
-  .topic-card {
-    background: var(--card); border-radius: 12px; padding: 16px;
-    cursor: pointer; border-left: 4px solid var(--primary);
-    box-shadow: 0 1px 3px rgba(0,0,0,.06); transition: transform .15s, box-shadow .15s;
-  }
-  .topic-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,.1); }
-  .topic-card h3 { margin-top: 0; color: var(--text); font-size: 1.05rem; }
-  .topic-card p { color: var(--muted); font-size: .9rem; margin: 0; }
-  .topic-card .badge {
-    display: inline-block; background: var(--accent); color: var(--primary);
-    padding: 2px 8px; border-radius: 6px; font-size: .78rem; margin-top: 8px;
-  }
-  .btn {
-    background: var(--primary); color: #fff; border: none; padding: 10px 18px;
-    border-radius: 8px; cursor: pointer; font-size: .95rem; font-weight: 500;
-    transition: background .15s; font-family: inherit;
-  }
-  .btn:hover { background: var(--primary-dark); }
-  .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
-  .btn-outline:hover { background: var(--accent); color: var(--primary-dark); }
-  .btn-green { background: var(--green); }
-  .btn-green:hover { background: #15803d; }
-  .btn-amber { background: var(--amber); }
-  .btn-amber:hover { background: #b45309; }
-  .btn:disabled { opacity: .4; cursor: not-allowed; }
-  .option {
-    display: block; width: 100%; text-align: left; padding: 12px 16px;
-    margin-bottom: 8px; border: 2px solid var(--border); border-radius: 10px;
-    background: var(--card); cursor: pointer; font-size: 1rem;
-    transition: all .15s; font-family: inherit; color: var(--text);
-  }
-  .option:hover:not(.disabled) { border-color: var(--primary); background: var(--accent); }
-  .option.correct { border-color: var(--green); background: #f0fdf4; }
-  .option.wrong { border-color: var(--red); background: #fef2f2; }
-  .option.disabled { cursor: default; }
-  .option-letter { font-weight: 700; margin-right: 8px; color: var(--primary); }
-  .progress-bar {
-    height: 6px; background: var(--border); border-radius: 3px;
-    overflow: hidden; margin-bottom: 16px;
-  }
-  .progress-fill { height: 100%; background: var(--primary); transition: width .3s; }
-  .question-meta {
-    display: flex; justify-content: space-between; font-size: .85rem;
-    color: var(--muted); margin-bottom: 8px; flex-wrap: wrap; gap: 6px;
-  }
-  .explanation {
-    background: #eff6ff; border-left: 4px solid var(--primary);
-    padding: 12px 16px; border-radius: 8px; margin-top: 12px; font-size: .92rem;
-  }
-  .flashcard {
-    min-height: 220px; display: flex; align-items: center; justify-content: center;
-    background: var(--card); border-radius: 16px; padding: 32px; cursor: pointer;
-    box-shadow: 0 4px 16px rgba(0,0,0,.08); text-align: center;
-    font-size: 1.2rem; user-select: none; transition: transform .2s;
-    border: 2px solid var(--border);
-  }
-  .flashcard:hover { transform: scale(1.02); }
-  .flashcard.back { background: linear-gradient(135deg, #dbeafe, #bfdbfe); color: var(--primary-dark); font-weight: 600; border-color: var(--primary); }
-  .result-item {
-    padding: 12px 14px; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid;
-    font-size: .93rem;
-  }
-  .result-item.ok { border-color: var(--green); background: #f0fdf4; }
-  .result-item.bad { border-color: var(--red); background: #fef2f2; }
-  .stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
-  .stat { background: var(--accent); padding: 12px 18px; border-radius: 10px; flex: 1; min-width: 130px; }
-  .stat-val { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
-  .stat-label { font-size: .82rem; color: var(--muted); }
-  .back-link { color: var(--primary); cursor: pointer; font-size: .9rem; margin-bottom: 12px; display: inline-block; }
-  .back-link:hover { text-decoration: underline; }
-  .hidden { display: none !important; }
-  .empty { text-align: center; color: var(--muted); padding: 40px 20px; }
-  footer { text-align: center; color: var(--muted); font-size: .82rem; padding: 24px; }
-  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: .9rem; }
-  th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
-  th { background: var(--accent); font-weight: 600; }
-  .timer {
-    font-family: 'Courier New', monospace; font-size: 1.3rem; font-weight: 700;
-    padding: 8px 16px; background: #1e293b; color: #4ade80; border-radius: 8px;
-    display: inline-block; margin-bottom: 12px;
-  }
-  .timer.warn { color: #fbbf24; }
-  .timer.danger { color: #f87171; animation: pulse 1s infinite; }
-  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .5; } }
-  .q-navigator {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
-    gap: 6px; margin: 16px 0;
-  }
-  .q-nav-btn {
-    padding: 8px; border: 1px solid var(--border); border-radius: 6px;
-    background: var(--card); cursor: pointer; font-size: .85rem;
-    font-family: inherit; color: var(--text);
-  }
-  .q-nav-btn.answered { background: var(--primary); color: #fff; border-color: var(--primary); }
-  .q-nav-btn.current { outline: 2px solid var(--amber); }
-  .q-nav-btn.correct { background: var(--green); color: #fff; border-color: var(--green); }
-  .q-nav-btn.wrong { background: var(--red); color: #fff; border-color: var(--red); }
-  .section-title {
-    font-size: 1.1rem; font-weight: 600; color: var(--primary-dark);
-    margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 2px solid var(--border);
-  }
-  .highlight-box {
-    background: #fffbeb; border-left: 4px solid var(--amber);
-    padding: 12px 16px; border-radius: 8px; margin: 12px 0;
-  }
-  .tip-box {
-    background: #f0fdf4; border-left: 4px solid var(--green);
-    padding: 12px 16px; border-radius: 8px; margin: 12px 0;
-  }
-  .option.selected { border-color: var(--primary); background: var(--accent); }
-  .match-row, .order-row {
-    display: flex; align-items: center; gap: 10px; padding: 10px 14px;
-    border: 2px solid var(--border); border-radius: 10px; margin-bottom: 8px;
-    background: var(--card);
-  }
-  .match-row.ok, .order-row.ok { border-color: var(--green); background: #f0fdf4; }
-  .match-row.bad, .order-row.bad { border-color: var(--red); background: #fef2f2; }
-  .match-left, .order-text { flex: 1; font-size: .95rem; }
-  .match-row select {
-    padding: 8px 10px; border: 2px solid var(--border); border-radius: 8px;
-    font-size: .95rem; font-family: inherit; background: var(--card);
-    color: var(--text); cursor: pointer; max-width: 45%;
-  }
-  .order-btn {
-    width: 34px; height: 34px; border: 1px solid var(--border); border-radius: 8px;
-    background: var(--card); cursor: pointer; font-size: 1rem; color: var(--text);
-    font-family: inherit; flex-shrink: 0;
-  }
-  .order-btn:hover:not(:disabled) { background: var(--accent); border-color: var(--primary); }
-  .order-btn:disabled { opacity: .35; cursor: default; }
-  @media (max-width: 600px) {
-    header { padding: 12px 16px; }
-    header h1 { font-size: 1rem; }
-    nav button { padding: 6px 10px; font-size: .8rem; }
-    main { margin: 16px auto; }
-    .card { padding: 16px; }
-    h2 { font-size: 1.2rem; }
-  }
+:root {
+  --bg: #0a0e1a;
+  --bg2: #101527;
+  --panel: #161d33;
+  --panel2: #1c2440;
+  --border: #27325a;
+  --text: #e8ecf8;
+  --muted: #8e9ac0;
+  --accent: #5b8cff;
+  --accent2: #8b5cf6;
+  --ok: #34d399;
+  --bad: #f87171;
+  --warn: #fbbf24;
+  --grad: linear-gradient(135deg, #5b8cff, #8b5cf6);
+  --grad2: linear-gradient(135deg, #8b5cf6, #ec4899);
+  --glow: 0 0 24px rgba(91, 140, 255, 0.18);
+}
+[data-theme="light"] {
+  --bg: #f0f2f5;
+  --bg2: #ffffff;
+  --panel: #ffffff;
+  --panel2: #f8f9fc;
+  --border: #d1d5db;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --accent: #3b82f6;
+  --accent2: #7c3aed;
+  --ok: #059669;
+  --bad: #dc2626;
+  --warn: #d97706;
+  --grad: linear-gradient(135deg, #3b82f6, #7c3aed);
+  --grad2: linear-gradient(135deg, #7c3aed, #db2777);
+  --glow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", sans-serif;
+  background: radial-gradient(1200px 800px at 85% -10%, rgba(139, 92, 246, 0.14), transparent 55%),
+              radial-gradient(1000px 700px at -10% 20%, rgba(91, 140, 255, 0.12), transparent 55%),
+              var(--bg);
+  background-attachment: fixed;
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.55;
+  transition: background 0.4s ease, color 0.3s ease;
+}
+[data-theme="light"] body {
+  background: linear-gradient(135deg, #f0f4ff 0%, #faf5ff 50%, #fff0f5 100%);
+}
+header {
+  background: rgba(10, 14, 26, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.35);
+  transition: background 0.4s ease, border-color 0.3s ease;
+}
+[data-theme="light"] header {
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+.header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 12px; flex-wrap: wrap; }
+.logo { font-size: 22px; font-weight: 800; letter-spacing: 0.3px; background: linear-gradient(90deg, #7aa5ff, #a78bfa, #e879f9); -webkit-background-clip: text; background-clip: text; color: transparent; white-space: nowrap; }
+.logo span { font-size: 12px; color: var(--muted); -webkit-text-fill-color: var(--muted); font-weight: 500; margin-left: 8px; }
+nav { display: flex; gap: 6px; flex-wrap: wrap; }
+nav button {
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.18s;
+}
+nav button:hover { color: var(--text); background: var(--panel); }
+nav button.active {
+  color: #fff;
+  background: linear-gradient(135deg, rgba(91, 140, 255, 0.22), rgba(139, 92, 246, 0.22));
+  border-color: rgba(122, 165, 255, 0.45);
+  border-bottom-color: #7aa5ff;
+  box-shadow: 0 0 18px rgba(91, 140, 255, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  transition: all 0.18s;
+  color: var(--text);
+}
+.theme-toggle:hover { background: var(--panel); transform: rotate(15deg) scale(1.1); }
+main { padding: 28px 0 60px; }
+h1 { font-size: 27px; margin-bottom: 6px; letter-spacing: 0.2px; }
+h2 { font-size: 19px; margin-bottom: 14px; font-weight: 700; }
+.sub { color: var(--muted); margin-bottom: 22px; font-size: 15px; }
+.card {
+  background: linear-gradient(180deg, var(--panel), var(--panel2));
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 16px;
+  transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+  position: relative;
+  animation: slideUp 0.45s ease both;
+}
+.card:hover { box-shadow: var(--glow); transform: translateY(-3px); }
+.card.theory-card { padding: 36px 44px; animation: fadeIn 0.5s ease both; }
+.grid { display: grid; gap: 14px; }
+.grid.cols2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.grid.cols3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--grad);
+  color: #fff; border: none; padding: 12px 22px;
+  border-radius: 12px; font-size: 15px; font-weight: 600;
+  cursor: pointer; transition: all 0.18s;
+  box-shadow: 0 4px 16px rgba(91, 140, 255, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 8px 26px rgba(91, 140, 255, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2); filter: brightness(1.06); }
+.btn:active { transform: translateY(0); }
+.btn.ghost { background: var(--panel); border: 1px solid var(--border); color: var(--text); box-shadow: none; }
+.btn.ghost:hover { border-color: var(--accent); background: var(--panel2); box-shadow: 0 0 16px rgba(91, 140, 255, 0.15); }
+.btn.danger { background: linear-gradient(135deg, #ef4444, #f97316); box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3); }
+.btn.small { padding: 8px 14px; font-size: 13px; border-radius: 10px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  background: var(--panel); border: 1px solid var(--border);
+  padding: 9px 15px; border-radius: 999px; cursor: pointer;
+  font-size: 13.5px; color: var(--muted); transition: all 0.15s; font-weight: 500;
+}
+.chip:hover { color: var(--text); border-color: var(--accent); }
+.chip.on { background: linear-gradient(135deg, rgba(91, 140, 255, 0.28), rgba(139, 92, 246, 0.28)); color: #fff; border-color: var(--accent); box-shadow: 0 0 14px rgba(91, 140, 255, 0.25); }
+.opt {
+  display: block; width: 100%; text-align: left;
+  background: var(--panel2); border: 1px solid var(--border);
+  color: var(--text); padding: 13px 16px; border-radius: 12px;
+  margin-bottom: 10px; cursor: pointer; font-size: 15px;
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
+}
+.opt:hover:not(:disabled) { border-color: var(--accent); transform: translateX(3px); }
+.opt:disabled { cursor: default; opacity: 0.95; }
+.opt.correct { border-color: var(--ok); background: rgba(52, 211, 153, 0.14); }
+.opt.wrong { border-color: var(--bad); background: rgba(248, 113, 113, 0.14); }
+.opt .letter { display: inline-block; width: 26px; height: 26px; line-height: 26px; text-align: center; background: var(--border); border-radius: 8px; margin-right: 12px; font-weight: 700; font-size: 13px; }
+.opt.correct .letter { background: var(--ok); color: #06281c; }
+.opt.wrong .letter { background: var(--bad); color: #2b0a0a; }
+.explain { border-left: 3px solid var(--accent); background: rgba(91, 140, 255, 0.08); padding: 14px 16px; border-radius: 0 12px 12px 0; margin: 14px 0; font-size: 14.5px; }
+.explain.bad { border-color: var(--bad); background: rgba(248, 113, 113, 0.08); }
+.explain.ok { border-color: var(--ok); background: rgba(52, 211, 153, 0.08); }
+.progress { height: 8px; background: var(--bg2); border-radius: 999px; overflow: hidden; margin: 10px 0; position: relative; }
+.progress > div { height: 100%; background: var(--grad); border-radius: 999px; transition: width 0.3s; position: relative; overflow: hidden; }
+.progress > div::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+  transform: translateX(-100%);
+  animation: shimmer 2.2s infinite;
+}
+@keyframes shimmer { 100% { transform: translateX(100%); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes popIn { 0% { opacity: 0; transform: scale(0.92); } 70% { transform: scale(1.02); } 100% { opacity: 1; transform: scale(1); } }
+.statbox { text-align: center; padding: 18px 10px; }
+.statbox .num { font-size: 30px; font-weight: 800; background: linear-gradient(90deg, #7aa5ff, #c084fc); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.statbox .lbl { color: var(--muted); font-size: 13px; margin-top: 4px; }
+.tag { display: inline-block; font-size: 12px; color: var(--muted); background: var(--bg2); padding: 3px 10px; border-radius: 999px; margin-bottom: 10px; border: 1px solid var(--border); }
+.row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.spacer { flex: 1; }
+.hidden { display: none !important; }
+.qtext { font-size: 17.5px; font-weight: 600; margin-bottom: 18px; line-height: 1.5; }
+.footer-note { color: var(--muted); font-size: 13px; text-align: center; margin-top: 26px; }
+.streak { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; padding: 6px 14px; border-radius: 999px; font-weight: 700; font-size: 13.5px; box-shadow: 0 0 16px rgba(245, 158, 11, 0.4); animation: pulse 1.8s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.82; } }
+.hint { color: var(--muted); font-size: 12.5px; margin-top: 12px; }
+.big-date { font-size: 46px; font-weight: 800; background: linear-gradient(90deg, #7aa5ff, #c084fc); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.mode-badge { display: inline-block; padding: 5px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 700; margin-right: 6px; border: 1px solid transparent; }
+.mode-learn { background: rgba(91, 140, 255, 0.18); color: #9db9ff; border-color: rgba(91, 140, 255, 0.45); }
+.mode-quiz { background: rgba(139, 92, 246, 0.18); color: #c4a8ff; border-color: rgba(139, 92, 246, 0.45); }
+.mode-exam { background: rgba(248, 113, 113, 0.18); color: #ffb0b0; border-color: rgba(248, 113, 113, 0.45); }
+select, input[type=number] {
+  background: var(--panel2); color: var(--text); border: 1px solid var(--border);
+  padding: 10px 14px; border-radius: 10px; font-size: 14px; outline: none;
+}
+select:focus, input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(91, 140, 255, 0.18); }
+.result-ring { font-size: 56px; font-weight: 800; text-align: center; }
+
+/* ===== Компоненты интерфейса (классы из разметки) ===== */
+.muted { color: var(--muted); }
+
+/* Варианты ответа */
+.option {
+  display: flex; align-items: center; width: 100%; text-align: left;
+  background: var(--panel2); border: 1px solid var(--border);
+  color: var(--text); padding: 14px 16px; border-radius: 12px;
+  margin-bottom: 10px; cursor: pointer; font-size: 15.5px; font-family: inherit;
+  transition: border-color 0.15s, background 0.15s, transform 0.12s;
+}
+.option:hover:not(.disabled) { border-color: var(--accent); transform: translateX(4px); }
+.option.disabled { cursor: default; }
+.option.selected { border-color: var(--accent); background: rgba(91, 140, 255, 0.14); }
+.option.correct { border-color: var(--ok); background: rgba(52, 211, 153, 0.14); animation: popIn 0.35s ease; }
+.option.wrong { border-color: var(--bad); background: rgba(248, 113, 113, 0.14); animation: shake 0.4s ease; }
+@keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+.option-letter {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: 28px; height: 28px; border-radius: 8px; margin-right: 12px;
+  background: var(--border); font-weight: 700; font-size: 13px; color: var(--text);
+}
+.option.selected .option-letter { background: var(--accent); color: #fff; }
+.option.correct .option-letter { background: var(--ok); color: #06281c; }
+.option.wrong .option-letter { background: var(--bad); color: #2b0a0a; }
+
+/* Сопоставление */
+.match-row {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+  background: var(--panel2); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px;
+}
+.match-row.ok { border-color: var(--ok); background: rgba(52, 211, 153, 0.1); }
+.match-row.bad { border-color: var(--bad); background: rgba(248, 113, 113, 0.1); }
+.match-left { flex: 1; font-size: 15px; }
+.match-row select { flex: 0 0 46%; }
+
+/* Упорядочивание */
+.order-row {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+  background: var(--panel2); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px;
+}
+.order-row.ok { border-color: var(--ok); background: rgba(52, 211, 153, 0.1); }
+.order-row.bad { border-color: var(--bad); background: rgba(248, 113, 113, 0.1); }
+.order-text { flex: 1; font-size: 15px; }
+.order-btn {
+  background: var(--panel); border: 1px solid var(--border); color: var(--text);
+  width: 34px; height: 34px; border-radius: 9px; cursor: pointer; font-size: 15px;
+  transition: all 0.15s;
+}
+.order-btn:hover:not(:disabled) { border-color: var(--accent); background: var(--panel2); }
+.order-btn:disabled { opacity: 0.35; cursor: default; }
+
+/* Кнопки-модификаторы */
+.btn-outline {
+  background: transparent; border: 1px solid var(--border); color: var(--text); box-shadow: none;
+}
+.btn-outline:hover:not(:disabled) { border-color: var(--accent); background: var(--panel); box-shadow: 0 0 16px rgba(91, 140, 255, 0.15); }
+.btn-green { background: linear-gradient(135deg, #10b981, #34d399); box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35); }
+.btn-amber { background: linear-gradient(135deg, #f59e0b, #f97316); box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+
+/* Прочие кнопки с .btn */
+.btn { font-family: inherit; }
+
+/* Метрики */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin: 18px 0; }
+.stat {
+  background: var(--panel2); border: 1px solid var(--border); border-radius: 12px;
+  padding: 16px 12px; text-align: center; animation: popIn 0.5s ease both;
+}
+.stat:nth-child(2) { animation-delay: 0.06s; }
+.stat:nth-child(3) { animation-delay: 0.12s; }
+.stat:nth-child(4) { animation-delay: 0.18s; }
+.stat-val { font-size: 28px; font-weight: 800; background: linear-gradient(90deg, #7aa5ff, #c084fc); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.stat-label { color: var(--muted); font-size: 12.5px; margin-top: 4px; }
+
+/* Карточки тем */
+.topic-card {
+  background: var(--panel2); border: 1px solid var(--border); border-radius: 14px;
+  padding: 18px; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden;
+}
+.topic-card::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  background: var(--grad); transform: scaleY(0); transform-origin: top; transition: transform 0.25s;
+}
+.topic-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 10px 30px rgba(91, 140, 255, 0.18); }
+.topic-card:hover::before { transform: scaleY(1); }
+.topic-card h3 { font-size: 16.5px; margin-bottom: 8px; }
+.topic-card p { color: var(--muted); font-size: 14px; line-height: 1.5; }
+.badge {
+  display: inline-block; margin-top: 12px; font-size: 12px; color: var(--muted);
+  background: var(--bg2); border: 1px solid var(--border); padding: 4px 11px; border-radius: 999px;
+}
+
+/* Навигация назад */
+.back-link {
+  display: inline-block; color: var(--muted); font-size: 14px; cursor: pointer;
+  margin-bottom: 14px; transition: color 0.15s, transform 0.15s;
+}
+.back-link:hover { color: var(--accent); transform: translateX(-3px); }
+
+/* Подсказки */
+.tip-box {
+  background: linear-gradient(135deg, rgba(91, 140, 255, 0.1), rgba(139, 92, 246, 0.08));
+  border: 1px solid rgba(91, 140, 255, 0.35); border-radius: 12px;
+  padding: 15px 18px; margin-top: 18px; font-size: 14.5px; line-height: 1.6;
+}
+
+/* Прогресс практики */
+.progress-bar { height: 8px; background: var(--bg2); border-radius: 999px; overflow: hidden; margin: 10px 0 6px; border: 1px solid var(--border); }
+.progress-fill { height: 100%; background: var(--grad); border-radius: 999px; transition: width 0.35s ease; }
+.question-meta { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); gap: 10px; flex-wrap: wrap; }
+.explanation {
+  border-left: 3px solid var(--accent); background: rgba(91, 140, 255, 0.08);
+  padding: 14px 16px; border-radius: 0 12px 12px 0; margin: 16px 0; font-size: 14.5px; line-height: 1.6;
+  animation: slideDown 0.3s ease;
+}
+
+/* Разбор ответов */
+.result-item { border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; border: 1px solid var(--border); background: var(--panel2); border-left-width: 4px; }
+.result-item.ok { border-left-color: var(--ok); }
+.result-item.bad { border-left-color: var(--bad); }
+.result-item b { color: var(--text); }
+
+/* Таймер */
+.timer {
+  display: inline-block; font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums;
+  padding: 8px 18px; border-radius: 12px; background: var(--panel2); border: 1px solid var(--border);
+  transition: all 0.3s;
+}
+.timer.warn { color: var(--warn); border-color: var(--warn); background: rgba(251, 191, 36, 0.12); }
+.timer.danger { color: var(--bad); border-color: var(--bad); background: rgba(248, 113, 113, 0.14); animation: pulse 1s infinite; }
+
+/* Навигатор вопросов */
+.q-navigator { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px; background: var(--bg2); border-radius: 12px; border: 1px solid var(--border); }
+.q-nav-btn {
+  width: 34px; height: 34px; border-radius: 9px; border: 1px solid var(--border);
+  background: var(--panel2); color: var(--muted); font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all 0.15s; font-family: inherit;
+}
+.q-nav-btn:hover { border-color: var(--accent); color: var(--text); }
+.q-nav-btn.answered { background: rgba(52, 211, 153, 0.18); border-color: var(--ok); color: var(--ok); }
+.q-nav-btn.current { background: var(--grad); color: #fff; border-color: transparent; box-shadow: 0 0 14px rgba(91, 140, 255, 0.45); }
+
+/* Флеш-карточка (даты) */
+.flashcard {
+  min-height: 190px; display: flex; align-items: center; justify-content: center; text-align: center;
+  padding: 30px; margin: 18px 0; border-radius: 18px; cursor: pointer;
+  background: linear-gradient(160deg, #1a2340, #232c52);
+  border: 1px solid var(--border); font-size: 26px; font-weight: 800; color: #9db9ff;
+  user-select: none; transition: transform 0.25s, box-shadow 0.25s;
+  animation: popIn 0.35s ease;
+}
+.flashcard:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 14px 40px rgba(91, 140, 255, 0.25); }
+.flashcard.back { background: linear-gradient(160deg, #14324a, #164a3d); color: #a7f3d0; font-size: 18px; font-weight: 600; }
+
+/* Заголовки секций и пустые состояния */
+.section-title { font-size: 16px; font-weight: 700; margin: 26px 0 12px; color: #cdd9ff; }
+.empty { color: var(--muted); padding: 24px; text-align: center; font-size: 14.5px; }
+
+/* Таблицы вне теории (прогресс) */
+.card table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 6px; }
+.card table th, .card table td { border: 1px solid var(--border); padding: 9px 12px; text-align: left; }
+.card table th { background: rgba(91, 140, 255, 0.12); color: #cdd9ff; font-weight: 700; }
+
+/* Светлая тема: правки контраста */
+[data-theme="light"] .theory-content b, [data-theme="light"] .theory-content strong { color: #1e293b; }
+[data-theme="light"] .theory-content h3 { color: #1e40af; }
+[data-theme="light"] .theory-content th { color: #1e40af; }
+[data-theme="light"] .section-title { color: #1e40af; }
+[data-theme="light"] .card table th { color: #1e40af; }
+[data-theme="light"] .flashcard { background: linear-gradient(160deg, #dbeafe, #ede9fe); color: #1e40af; }
+[data-theme="light"] .flashcard.back { background: linear-gradient(160deg, #d1fae5, #ccfbf1); color: #065f46; }
+[data-theme="light"] .tip-box { background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(124,58,237,0.06)); }
+[data-theme="light"] .opt, [data-theme="light"] .option { background: #fff; }
+
+/* --- Теория: типографика контента --- */
+.theory-content { font-size: 16px; line-height: 1.95; color: var(--text); max-width: 860px; }
+.theory-content h3 {
+  font-size: 18.5px; font-weight: 700; margin: 32px 0 16px;
+  padding-bottom: 10px; border-bottom: 1px solid var(--border);
+  color: #cdd9ff; letter-spacing: 0.2px;
+}
+.theory-content h3:first-child { margin-top: 6px; }
+.theory-content h4 { font-size: 16px; font-weight: 700; margin: 22px 0 10px; color: #b9c8f5; }
+.theory-content p { margin: 0 0 16px; }
+.theory-content ul, .theory-content ol { margin: 0 0 18px; padding-left: 26px; }
+.theory-content li { margin-bottom: 11px; padding-left: 4px; }
+.theory-content li::marker { color: var(--accent); }
+.theory-content li > ul, .theory-content li > ol { margin: 10px 0 3px; }
+.theory-content b, .theory-content strong { color: #eaf0ff; font-weight: 700; }
+.theory-content table { width: 100%; border-collapse: collapse; margin: 8px 0 20px; font-size: 14.5px; }
+.theory-content th, .theory-content td {
+  border: 1px solid var(--border); padding: 12px 15px; text-align: left; vertical-align: top;
+}
+.theory-content th { background: rgba(91, 140, 255, 0.14); color: #cdd9ff; font-weight: 700; }
+.theory-content tbody tr:nth-child(even) td, .theory-content tr:nth-child(even) td { background: rgba(255, 255, 255, 0.022); }
+.theory-content .highlight-box {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(239, 68, 68, 0.09));
+  border: 1px solid rgba(245, 158, 11, 0.42);
+  border-left: 4px solid #f59e0b;
+  border-radius: 12px; padding: 18px 20px; margin: 22px 0;
+}
+.theory-content .highlight-box ul { margin-bottom: 0; }
+.theory-content .highlight-box li { margin-bottom: 8px; }
+.theory-content .highlight-box > b:first-child { display: block; margin-bottom: 10px; color: #ffd591; }
+.theory-content .term {
+  display: inline-block; background: rgba(91, 140, 255, 0.14); border: 1px solid rgba(91, 140, 255, 0.38);
+  color: #cdd9ff; padding: 1px 8px; border-radius: 6px; font-size: 13.5px; font-weight: 600;
+}
+.theory-content blockquote {
+  margin: 16px 0; padding: 14px 18px; border-left: 3px solid var(--accent);
+  background: rgba(91, 140, 255, 0.07); border-radius: 0 10px 10px 0; color: var(--muted);
+}
+.theory-actions {
+  margin-top: 32px; padding-top: 20px;
+  border-top: 1px solid var(--border);
+  display: flex; gap: 10px; flex-wrap: wrap;
+}
+@media (max-width: 640px) {
+  .theory-content { font-size: 14.5px; }
+  .theory-content th, .theory-content td { padding: 8px 10px; font-size: 13px; }
+  .theory-content ul, .theory-content ol { padding-left: 19px; }
+  .card.theory-card { padding: 22px 18px; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .match-row { flex-wrap: wrap; }
+  .match-row select { flex: 1 1 100%; }
+  .q-navigator { gap: 5px; }
+  .q-nav-btn { width: 30px; height: 30px; font-size: 12px; }
+}
+@media (max-width: 640px) {
+  .logo { font-size: 18px; }
+  h1 { font-size: 22px; }
+  .topicrow .name { width: 130px; font-size: 13px; }
+  .big-date { font-size: 36px; }
+  .qtext { font-size: 16px; }
+}
 </style>
 </head>
 <body>
    <header>
-  <h1 onclick="showPage('home')">📚 ИсторияБел</h1>
+  <div class="header-inner">
+    <h1 onclick="showPage('home')">📚 ИсторияБел</h1>
+    <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()" title="Переключить тему">🌙</button>
+  </div>
   <nav id="nav">
     <button data-page="home" onclick="showPage('home')">Главная</button>
     <button data-page="theory" onclick="showPage('theory')">Теория</button>
@@ -207,28 +468,43 @@
 /* ===================================================================
    БЛОК 1. ТЕОРИЯ — 8 разделов
    =================================================================== */
+const TOPIC_EMOJI = {
+  ancient: "🏛️",
+  polotsk: "⚔️",
+  vkl: "👑",
+  rp: "🦅",
+  ri: "🕯️",
+  bnr: "🚩",
+  vov: "🔥",
+  modern: "🇧🇾",
+  all: "🎯"
+};
+
 const THEORY = [
   {
     id: "ancient",
     title: "Древние времена и расселение славян",
     summary: "Каменный век — VIII в. н.э.",
     content: `
-      <h3>Ключевые факты</h3>
+      <h3>🦴 Ключевые факты</h3>
       <ul>
-        <li><b>100–35 тыс. лет назад</b> — первые стоянки человека на территории Беларуси (Юровичи, Бердыж).</li>
-        <li><b>3–2 тыс. до н.э.</b> — переход к бронзовому веку, индоевропейцы.</li>
-        <li><b>VII–VI вв. до н.э.</b> — железный век, начало формирования балтских племён.</li>
-        <li><b>V–VIII вв. н.э.</b> — расселение славян на белорусских землях.</li>
-        <li><b>VI–VIII вв.</b> — формирование племенных союзов: кривичи (Полоцк), дреговичи, радимичи.</li>
+        <li><b>🏔 100–35 тыс. лет назад</b> — проникновение первых людей (неандертальцев) на территорию Беларуси.</li>
+        <li><b>🧬 40–35 тыс. лет назад</b> — появление человека современного типа (кроманьонца).</li>
+        <li><b>🪨 24-е тыс. до н.э.</b> — наиболее древняя стоянка человека — около д. Юровичи (Калинковичский район); <b>📍 22–21-е тыс. до н.э.</b> — стоянка около д. Бердыж (Чечерский район).</li>
+        <li><b>🌾 3-е тыс. до н.э.</b> — переход от охоты и собирательства к животноводству и земледелию; <b>👥 середина 3-го тыс. до н.э.</b> — начало расселения индоевропейцев.</li>
+        <li><b>⚔️ 2-е тыс. до н.э. — конец VIII в. до н.э.</b> — бронзовый век.</li>
+        <li><b>🗡 VII в. до н.э. — конец V в. н.э.</b> — железный век.</li>
+        <li><b>🏘 Конец IV в.</b> — славяне проживают на юге Белорусского Полесья; <b>🌍 VI–VIII вв.</b> — расселение славян на территории Беларуси.</li>
+        <li><b>⚔️ VIII–IX вв.</b> — образование племенных союзов: кривичей-полочан, дреговичей, радимичей.</li>
       </ul>
 
-      <h3>Связь с всемирной историей</h3>
+      <h3>🌍 Связь с всемирной историей</h3>
       <ul>
-        <li>Великое переселение народов (IV–VII вв.) → расселение славян.</li>
-        <li>Славянизация балтского населения — как в других регионах Европы (франки и галлы, англы и бритты).</li>
+        <li>🌊 Великое переселение народов (IV–VII вв.) → расселение славян.</li>
+        <li>🔄 Славянизация балтского населения — как в других регионах Европы (франки и галлы, англы и бритты).</li>
       </ul>
 
-      <h3>Племена на белорусских землях</h3>
+      <h3>🗺 Племена на белорусских землях</h3>
       <table>
         <tr><th>Племя</th><th>Регион</th><th>Города</th></tr>
         <tr><td>Кривичи (полочане)</td><td>Север (Полоцк, Витебск)</td><td>Полоцк, Витебск</td></tr>
@@ -239,8 +515,9 @@ const THEORY = [
       <div class="highlight-box">
         <b>⚠️ Ловушки ЦЭ/ЦТ:</b>
         <ul>
-          <li>Не путать первые стоянки (Юровичи, Бердыж — <b>100–35 тыс. лет назад</b>) с первыми городами.</li>
-          <li>Кривичи ≠ дреговичи ≠ радимичи — важно их регионы.</li>
+          <li>🚫 Не путать стоянки: <b>🏺 Юровичи — 24-е тыс. до н.э.</b> (древнейшая), <b>📍 Бердыж — 22–21-е тыс. до н.э.</b></li>
+          <li>🌍 Славяне: <b>📍 конец IV в.</b> — юг Белорусского Полесья, <b>🚶‍♂️ VI–VIII вв.</b> — расселение на территории Беларуси.</li>
+          <li>⚔️ Кривичи (полочане) ≠ дреговичи ≠ радимичи — важно их регионы.</li>
         </ul>
       </div>
     `
@@ -250,7 +527,7 @@ const THEORY = [
     title: "Полоцкая земля в X–XII вв. в контексте процессов в Восточной и Центральной Европе",
     summary: "Первые государства на белорусских землях · синхронизация с Европой и Русью",
     content: `
-      <h3>Синхронистический хронограф: Беларусь — Европа — Русь</h3>
+      <h3>⏳ Синхронистический хронограф: Беларусь — Европа — Русь</h3>
       <p>Полоцкая земля развивалась в общем ритме средневековой Европы: христианизация, рост городов, борьба за торговые пути. Сопоставление дат — ключ к заданиям ЦЭ/ЦТ.</p>
       <div style="overflow-x:auto;">
       <table>
@@ -258,11 +535,11 @@ const THEORY = [
         <tr><td>IX–X вв.</td><td>Формирование Полоцкого княжества у кривичей-полочан; Полоцк — центр двинского пути</td><td>Распад империи Каролингов (843); складывание государств Центральной Европы</td><td>Образование Древнерусского государства (882)</td></tr>
         <tr><td>862</td><td>Первое упоминание Полоцка в «Повести временных лет»</td><td>Эпоха викингов: набеги норманнов на Европу</td><td>Летописное «призвание варягов»; Рюрик в Новгороде</td></tr>
         <tr><td>980</td><td>Первое упоминание Турова; Владимир захватил Полоцк, погиб Рогволод; Рогнеда — жена Владимира</td><td>Формирование Венгерского королевства</td><td>Владимир Святославич — киевский князь</td></tr>
-        <tr><td>988–992</td><td>Христианизация белорусских земель; ок. 992 — Полоцкая епархия</td><td>966 — крещение Польши; ок. 1000 — коронация Иштвана I в Венгрии</td><td>988 — крещение Руси</td></tr>
-        <tr><td>1001–1019</td><td>Смерть Изяслава (1001) — начало династии Изяславичей; первое упоминание Берестья (1019)</td><td>1016–1035 — правление Кнута Великого в Англии и Дании</td><td>1019 — Ярослав Мудрый в Киеве</td></tr>
-        <tr><td>1021</td><td>Битва на Судоме; Брячислав получает Витебск и Усвят</td><td>1025 — коронация Болеслава Храброго в Польше</td><td>Борьба Ярослава Мудрого с Брячиславом Полоцким</td></tr>
-        <tr><td>XI в.</td><td>Софийский собор в Полоцке — один из древнейших каменных храмов Руси</td><td>Романский стиль в архитектуре Европы; Клюнийская реформа</td><td>1037 — Софийский собор в Киеве; 1045–1050 — София Новгородская</td></tr>
-        <tr><td>1044–1067</td><td>Правление Всеслава Чародея (с 1044); битва на Немиге (1067)</td><td>1054 — раскол христианской церкви; 1066 — норманнское завоевание Англии</td><td>Смерть Ярослава Мудрого (1054); пленение Всеслава Ярославичами</td></tr>
+        <tr><td>988–992</td><td>988 — начало княжения Изяслава в Полоцке и Святополка в Турове; христианизация белорусских земель; ок. 992 — Полоцкая епархия</td><td>966 — крещение Польши; ок. 1000 — коронация Иштвана I в Венгрии</td><td>988 — крещение Руси</td></tr>
+        <tr><td>1001–1019</td><td>Смерть Изяслава (1001); с 1003 г. — княжение Брячислава Изяславича; первое упоминание Берестья (1019)</td><td>1016–1035 — правление Кнута Великого в Англии и Дании</td><td>1019 — начало правления Ярослава Мудрого в Киеве</td></tr>
+        <tr><td>1021</td><td>Поход Брячислава на Новгород и битва на р. Судомирь; по миру Витебск и Усвяты отошли к Полоцкому княжеству</td><td>1025 — коронация Болеслава Храброго в Польше</td><td>Борьба Ярослава Мудрого с Брячиславом Полоцким</td></tr>
+        <tr><td>XI в.</td><td>Софийский собор в Полоцке (середина XI в.) — третий собор Св. Софии на Руси после Киева и Новгорода</td><td>Романский стиль в архитектуре Европы; Клюнийская реформа</td><td>1037 — Софийский собор в Киеве; 1045–1050 — София Новгородская</td></tr>
+        <tr><td>1044–1067</td><td>Правление Всеслава Чародея (с 1044); битва на Немиге (3 марта 1067)</td><td>1054 — раскол христианской церкви; 1066 — норманнское завоевание Англии</td><td>Смерть Ярослава Мудрого (1054); пленение Всеслава Ярославичами</td></tr>
         <tr><td>1095–1099</td><td>Полоцкая земля обособляется от Киева</td><td>1095 — Клермонский собор; 1096–1099 — Первый крестовый поход</td><td>1097 — Любечский съезд: «каждый да держит отчину свою»</td></tr>
         <tr><td>1101</td><td>Смерть Всеслава; распад Полоцкой земли на уделы</td><td>1108–1137 — правление Людовика VI во Франции</td><td>Эпоха Владимира Мономаха</td></tr>
         <tr><td>1119–1129</td><td>Пленение минского князя Глеба (1119); высылка полоцких князей в Византию (1129)</td><td>1122 — Вормсский конкордат между империей и папством</td><td>Правление Владимира Мономаха (1113–1125) и Мстислава Великого (1125–1132)</td></tr>
@@ -273,8 +550,8 @@ const THEORY = [
       </table>
       </div>
 
-      <h3>Терминологический аппарат (формулировки РИКЗ)</h3>
-      <p><b>Общественно-политические понятия:</b></p>
+      <h3>📖 Терминологический аппарат (формулировки РИКЗ)</h3>
+      <p><b>👥 Общественно-политические понятия:</b></p>
       <ul>
         <li><b>Вече</b> — собрание горожан, решавшее важнейшие вопросы жизни города; в Полоцке вече приглашало и изгоняло князей, решало вопросы войны и мира.</li>
         <li><b>Князь</b> — глава княжества, военачальник и судья; в Полоцке его власть ограничивалась вечем.</li>
@@ -283,7 +560,7 @@ const THEORY = [
         <li><b>Удел</b> — часть земли (княжества), которой владел отдельный князь.</li>
         <li><b>Волость</b> — сельская территория, подчинённая городу.</li>
       </ul>
-      <p><b>Социально-экономические понятия:</b></p>
+      <p><b>💰 Социально-экономические понятия:</b></p>
       <ul>
         <li><b>Полюдье</b> — объезд князем с дружиной подвластных земель для сбора дани.</li>
         <li><b>Дань</b> — натуральный или денежный сбор с населения в пользу князя.</li>
@@ -296,7 +573,7 @@ const THEORY = [
         <li><b>Гость</b> — купец, ведший торговлю, в том числе международную.</li>
         <li><b>Волок</b> — участок суши между реками, по которому перетаскивали суда.</li>
       </ul>
-      <p><b>Торговые пути:</b></p>
+      <p><b>🛶 Торговые пути:</b></p>
       <ul>
         <li><b>«Путь из варяг в греки»</b> — система речных путей из Балтийского моря в Чёрное.</li>
         <li><b>Двинский путь</b> — торговый путь по Западной Двине к Балтике — основа богатства Полоцка.</li>
@@ -312,21 +589,21 @@ const THEORY = [
         <li><b>«Слово»</b> — жанр торжественной ораторской прозы (произведения Кирилла Туровского).</li>
       </ul>
 
-      <h3>Персоналии и исторические портреты</h3>
-      <p><b>Деятели белорусских земель</b></p>
+      <h3>👤 Персоналии и исторические портреты</h3>
+      <p><b>🏰 Деятели белорусских земель</b></p>
       <table>
         <tr><th>Персоналия</th><th>Годы</th><th>Ключевые решения и вклад</th></tr>
         <tr><td>Рогволод</td><td>X в. (погиб в 980)</td><td>Первый известный полоцкий князь, «пришёл из-за моря»; погиб при захвате Полоцка Владимиром</td></tr>
         <tr><td>Рогнеда</td><td>ок. 960 — ок. 1000</td><td>Дочь Рогволода; отказала Владимиру, стала его женой; мать Изяслава; по преданию — Горислава</td></tr>
-        <tr><td>Изяслав Владимирович</td><td>ок. 979–1001</td><td>Сын Рогнеды; родоначальник династии полоцких Изяславичей</td></tr>
-        <tr><td>Брячислав Изяславич</td><td>1001–1044</td><td>Боролся с Ярославом Мудрым; 1021 — битва на Судоме; получил Витебск и Усвят</td></tr>
+        <tr><td>Изяслав Владимирович</td><td>ок. 979 — после 1001</td><td>Сын Рогнеды; с 988 г. в Полоцке — родоначальник династии полоцких Изяславичей</td></tr>
+        <tr><td>Брячислав Изяславич</td><td>1003–1044 (княжение)</td><td>Боролся с Ярославом Мудрым; 1021 — поход на Новгород и битва на р. Судомирь; получил Витебск и Усвяты</td></tr>
         <tr><td>Всеслав Брячиславич (Чародей)</td><td>1044–1101</td><td>Правил 57 лет; 1067 — битва на Немиге; расцвет Полоцка, Софийский собор; герой «Слова о полку Игореве»</td></tr>
         <tr><td>Глеб Всеславич</td><td>?–1119</td><td>Минский князь; в 1119 г. пленён Владимиром Мономахом — Минское княжество потеряло самостоятельность</td></tr>
         <tr><td>Евфросиния Полоцкая (Предслава)</td><td>ок. 1104–1173</td><td>Просветительница; основала монастыри, переписывала книги; заказала крест Лазаря Богши (1161); умерла в Иерусалиме</td></tr>
         <tr><td>Кирилл Туровский</td><td>ок. 1130 — ок. 1182</td><td>Епископ Туровский, писатель и проповедник, «Златоуст» XII в.</td></tr>
         <tr><td>Лазарь Богша</td><td>XII в.</td><td>Мастер-ювелир, изготовивший в 1161 г. напрестольный крест Евфросинии Полоцкой</td></tr>
       </table>
-      <p><b>Мировые фигуры, повлиявшие на регион</b></p>
+      <p><b>🌍 Мировые фигуры, повлиявшие на регион</b></p>
       <table>
         <tr><th>Персоналия</th><th>Годы жизни / правления</th><th>Вклад и связь с белорусскими землями</th></tr>
         <tr><td>Владимир Святославич</td><td>ок. 960–1015</td><td>Киевский князь; 980 — захват Полоцка; 988 — крещение Руси; отец Изяслава Полоцкого</td></tr>
@@ -338,7 +615,7 @@ const THEORY = [
         <tr><td>Урбан II</td><td>1088–1099</td><td>Папа Римский; 1095 — призыв к Первому крестовому походу</td></tr>
       </table>
 
-      <h3>Причинно-следственные связи (ПСС)</h3>
+      <h3>🔗 Причинно-следственные связи (ПСС)</h3>
       <p><b>1. Возникновение Полоцкого княжества</b></p>
       <ul>
         <li><b>Фактор:</b> выгодное положение на Западной Двине — двинском пути из Балтики в Чёрное море; разложение первобытнообщинного строя у кривичей-полочан.</li>
@@ -380,7 +657,7 @@ const THEORY = [
         <li><b>Итог:</b> экономическая основа самостоятельности Полоцкой земли и вечевого строя.</li>
       </ul>
 
-      <h3>Культура, конфессии и социально-экономическое развитие</h3>
+      <h3>🎭 Культура, конфессии и социально-экономическое развитие</h3>
       <p><b>Религия: от язычества к христианству.</b> До конца X в. господствовало язычество (Перун, Велес, обряды, капища). После крещения Руси (988) началась христианизация: около 992 г. создана Полоцкая епархия, в 1005 г. — Туровская. Христианизация шла медленно, в деревне долго сохранялись языческие обряды — складывалось двоеверие. Монастыри стали центрами книжности и просвещения.</p>
       <p><b>Архитектура.</b> Софийский собор в Полоцке (XI в., при Всеславе) — третий Софийский собор Руси после Киева и Новгорода (в древнем виде не сохранился — перестроен в XVIII в. в стиле барокко). Спасо-Преображенская (Спасская) церковь в Полоцке (середина XII в.), Борисоглебская (Коложская) церковь в Гродно (XII в.), Благовещенская церковь в Витебске (XII в.). В Европе в это время — романский стиль, строительство соборов.</p>
       <p><b>Живопись и декоративное искусство.</b> Фрески Спасской церкви в Полоцке; крест Лазаря Богши (1161) — шедевр перегородчатой эмали, утрачен в 1941 г., воссоздан в 1997 г.</p>
@@ -392,7 +669,7 @@ const THEORY = [
         <ul>
           <li><b>862 ≠ 980 ≠ 1019 ≠ 1067.</b> Полоцк — 862, Туров — 980, Берестье — 1019, Минск — 1067. Запоминай пары «город — год».</li>
           <li><b>1067 — двойное событие:</b> битва на Немиге И первое упоминание Минска.</li>
-          <li><b>Судома (1021) ≠ Немига (1067):</b> Судома — битва Брячислава с Ярославом; Немига — битва Всеслава с Ярославичами.</li>
+          <li><b>Судомирь (1021) ≠ Немига (1067):</b> Судомирь — битва Брячислава с Ярославом; Немига — битва Всеслава с Ярославичами.</li>
           <li><b>Всеслав правил 57 лет (1044–1101)</b> — не путай дату начала правления (1044) с битвой на Немиге (1067).</li>
           <li><b>Кирилл Туровский — Туров</b>, не Полоцк; «Златоуст» XII в.</li>
           <li><b>Крест изготовил Лазарь Богша в 1161 г.</b>; подлинник утрачен в 1941 г., современная реликвия — воссоздание 1997 г.</li>
@@ -404,7 +681,7 @@ const THEORY = [
         </ul>
       </div>
 
-      <h3>Практический полигон: 10 заданий формата ЦЭ/ЦТ</h3>
+      <h3>🎯 Практический полигон: 10 заданий формата ЦЭ/ЦТ</h3>
       <p>Структура: <b>часть А</b> — задания А1–А5 с одиночным выбором и А6 с множественным выбором; <b>часть Б</b> — Б1–Б2 на установление соответствия, Б3 на хронологическую последовательность, Б4 на работу с историческим документом.</p>
       <p>После каждого ответа открывается подробный разбор — «ключ» с объяснением правильного и неправильных вариантов. Запусти полигон кнопкой ниже.</p>
     `
@@ -414,26 +691,31 @@ const THEORY = [
     title: "Великое княжество Литовское (XIII–XVI вв.)",
     summary: "От Миндовга до Люблинской унии",
     content: `
-      <h3>Ключевые факты</h3>
+      <h3>📌 Ключевые факты</h3>
       <ul>
-        <li><b>1230–1263</b> — правление Миндовга, объединение балтских и восточнославянских земель.</li>
-        <li><b>1253 г.</b> — коронация Миндовга (единственный король в истории ВКЛ).</li>
+        <li><b>1230-е гг.</b> — «Литва Миндовга» (первое упоминание — 1235 г.); объединение балтских и восточнославянских земель.</li>
+        <li><b>1253 г.</b> — коронация Миндовга в Новогрудке (1253–1263; единственный король в истории ВКЛ).</li>
         <li><b>1263 г.</b> — гибель Миндовга.</li>
         <li><b>1316–1341</b> — Гедимин; при нём в ВКЛ входят Витебск, Минск, Брест.</li>
+        <li><b>1323 г.</b> — перенос столицы ВКЛ из Новогрудка в Вильно.</li>
         <li><b>1345–1377</b> — Ольгерд; походы на Москву (1368, 1370, 1372).</li>
+        <li><b>1348 г.</b> — битва на р. Стрива.</li>
         <li><b>1385 г.</b> — Кревская уния (династический союз с Польшей).</li>
         <li><b>1386 г.</b> — Ягайло становится королём Польши (женитьба на Ядвиге).</li>
         <li><b>1392 г.</b> — Островское соглашение: Витовт — великий князь ВКЛ.</li>
         <li><b>1401 г.</b> — Виленско-Радомская уния.</li>
         <li><b>15 июля 1410 г.</b> — Грюнвальдская битва — разгром Тевтонского ордена.</li>
         <li><b>1413 г.</b> — Городельская уния (привилегии католической шляхте).</li>
-        <li><b>1432–1436</b> — гражданская война (Свидригайло vs Сигизмунд).</li>
-        <li><b>1447</b> — привилей Казимира (личная свобода шляхты).</li>
+        <li><b>1399 г.</b> — битва на р. Ворскла.</li>
+        <li><b>1432–1439</b> — династическая война в ВКЛ (Свидригайло vs Сигизмунд Кейстутович).</li>
+        <li><b>1 сентября 1435 г.</b> — битва под Вилькомиром.</li>
+        <li><b>1447</b> — привилей Казимира: земли и должности — только уроженцам ВКЛ; начало юридического оформления крепостного права.</li>
+        <li><b>1468</b> — Судебник Казимира.</li>
         <li><b>1529, 1566, 1588</b> — Статуты ВКЛ.</li>
         <li><b>1 июля 1569 г.</b> — Люблинская уния, образование Речи Посполитой.</li>
       </ul>
 
-      <h3>Связь с всемирной историей</h3>
+      <h3>🌍 Связь с всемирной историей</h3>
       <ul>
         <li>Грюнвальд — часть борьбы Восточной Европы с Тевтонским орденом (XIII–XV вв.).</li>
         <li>Унии с Польшей — аналогичны Кальмарской унии (1397) в Скандинавии.</li>
@@ -441,10 +723,10 @@ const THEORY = [
         <li>Магдебургское право (Брест 1390, Минск 1499, Полоцк 1498) — общеевропейская практика.</li>
       </ul>
 
-      <h3>Персоналии</h3>
+      <h3>👤 Персоналии и исторические портреты</h3>
       <table>
         <tr><th>Имя</th><th>Годы</th><th>Чем известен</th></tr>
-        <tr><td>Миндовг</td><td>1230–1263</td><td>Основатель ВКЛ, единственный король</td></tr>
+        <tr><td>Миндовг</td><td>…–1263 (княжение с 1253 г.)</td><td>Основатель ВКЛ, единственный король (1253, Новогрудок)</td></tr>
         <tr><td>Гедимин</td><td>1316–1341</td><td>Расширение на восток, основание династии Гедиминовичей</td></tr>
         <tr><td>Ольгерд</td><td>1345–1377</td><td>Походы на Москву, разгром татар на Синих Водах (1362)</td></tr>
         <tr><td>Ягайло</td><td>1377–1434</td><td>Король Польши, Кревская уния</td></tr>
@@ -469,22 +751,27 @@ const THEORY = [
     title: "Речь Посполитая (1569–1795)",
     summary: "От Люблина до трёх разделов",
     content: `
-      <h3>Ключевые факты</h3>
+      <h3>📌 Ключевые факты</h3>
       <ul>
         <li><b>1569</b> — Люблинская уния, образование Речи Посполитой (федерация двух государств).</li>
         <li><b>1573</b> — «Генриковы артикулы» (ограничение власти короля).</li>
-        <li><b>1588</b> — III Статут ВКЛ (действовал до 1840 г.).</li>
+        <li><b>1581</b> — статут Стефана Батория (судебная реформа).</li>
+        <li><b>1588</b> — III Статут ВКЛ (действовал до 1840 г.); полное юридическое оформление крепостного права.</li>
         <li><b>1596</b> — Брестская церковная уния (униатство).</li>
-        <li><b>1600–1629</b> — войны со Швецией и Россией.</li>
+        <li><b>1600–1611, 1617–1629</b> — польско-шведские войны.</li>
+        <li><b>1609–1618</b> — польско-московская война (вмешательство в Смуту; Деулинское перемирие 1618: Смоленск и Чернигов — Речи Посполитой).</li>
+        <li><b>1632–1634</b> — Смоленская война (Поляновский мир: Смоленск остался за РП).</li>
         <li><b>1648–1651</b> — казацко-крестьянская война под руководством Богдана Хмельницкого.</li>
-        <li><b>1654–1667</b> — война с Московским государством; «кровавый потоп».</li>
+        <li><b>1654–1667</b> — война с Московским государством; «кровавый потоп» (1655–1660).</li>
+        <li><b>1667</b> — Андрусовское перемирие (левобережная Украина и Киев — Москве).</li>
+        <li><b>1686</b> — «Вечный мир» с Московским государством.</li>
         <li><b>1700–1721</b> — Северная война (боевые действия на белорусских землях).</li>
         <li><b>1772, 1793, 1795</b> — три раздела Речи Посполитой.</li>
         <li><b>1791</b> — Конституция 3 мая (первая в Европе, вторая в мире после США).</li>
         <li><b>1794</b> — восстание под руководством Тадеуша Костюшко.</li>
       </ul>
 
-      <h3>Связь с всемирной историей</h3>
+      <h3>🌍 Связь с всемирной историей</h3>
       <ul>
         <li>Брестская уния — часть Контрреформации и католической экспансии на восток.</li>
         <li>Разделы РП — в контексте экспансии России, Пруссии и Австрии.</li>
@@ -492,7 +779,7 @@ const THEORY = [
         <li>Восстание Костюшко — отклик на Великую французскую революцию.</li>
       </ul>
 
-      <h3>Персоналии</h3>
+      <h3>👤 Персоналии и исторические портреты</h3>
       <table>
         <tr><th>Имя</th><th>Годы</th><th>Чем известен</th></tr>
         <tr><td>Богдан Хмельницкий</td><td>1595–1657</td><td>Восстание 1648–1651</td></tr>
@@ -516,30 +803,38 @@ const THEORY = [
     title: "Беларусь в составе Российской империи (1795–1917)",
     summary: "От разделов до Февральской революции",
     content: `
-      <h3>Ключевые факты</h3>
+      <h3>📌 Ключевые факты</h3>
       <ul>
+        <li><b>1772, 1793, 1795</b> — три раздела Речи Посполитой: белорусские земли постепенно входят в состав России.</li>
+        <li><b>1772</b> — присоединена восточная Беларусь (Могилёвская и Полоцкая губернии); <b>1793</b> — центральная (Минская губерния); <b>1795</b> — западная (Виленская, Гродненская губернии).</li>
         <li><b>1795</b> — белорусские земли полностью входят в состав России.</li>
         <li><b>1803</b> — введение «черты оседлости» для евреев.</li>
         <li><b>1812</b> — Отечественная война; боевые действия на белорусских землях.</li>
+        <li><b>1812</b> — Борисовская переправа (26–28 ноября): корпус Ожерува задержал наступление Наполеона.</li>
         <li><b>1830–1831</b> — восстание (после него закрыт Виленский университет в 1832).</li>
         <li><b>1839</b> — Полоцкий церковный собор (ликвидация униатства).</li>
         <li><b>1840</b> — отмена Статута ВКЛ; введение общероссийского законодательства.</li>
         <li><b>1861</b> — отмена крепостного права.</li>
         <li><b>1863–1864</b> — восстание под руководством Кастуся Калиновского.</li>
+        <li><b>1863</b> — закрыт Петербургский университет (в связи с студенческими волнениями).</li>
+        <li><b>1867</b> — открыт Рижский политехнический институт.</li>
         <li><b>1905–1907</b> — первая русская революция, легализация партий.</li>
         <li><b>1905 (17 октября)</b> — Манифест о свободах.</li>
         <li><b>1905–1906</b> — деятельность Белорусской социалистической громады.</li>
+        <li><b>1906</b> — открыт Гродненский государственный университет.</li>
+        <li><b>1914</b> — начало Первой мировой войны.</li>
+        <li><b>1915</b> — Великое отступление русской армии; оккупация немецкими войсками Виленской, Гродненской, части Минской губерний.</li>
         <li><b>1917</b> — Февральская и Октябрьская революции.</li>
       </ul>
 
-      <h3>Связь с всемирной историей</h3>
+      <h3>🌍 Связь с всемирной историей</h3>
       <ul>
         <li>Восстания 1830–1831 и 1863–1864 — отклик на европейские революции.</li>
         <li>Отмена крепостного права (1861) — часть «Великих реформ» Александра II.</li>
         <li>Наполеоновские войны → Отечественная война 1812 г.</li>
       </ul>
 
-      <h3>Персоналии</h3>
+      <h3>👤 Персоналии и исторические портреты</h3>
       <table>
         <tr><th>Имя</th><th>Годы</th><th>Чем известен</th></tr>
         <tr><td>Тадеуш Костюшко</td><td>1746–1817</td><td>Восстание 1794, герой 1812</td></tr>
@@ -564,29 +859,33 @@ const THEORY = [
     title: "БНР, БССР и межвоенный период (1917–1939)",
     summary: "От провозглашения БНР до 17 сентября 1939",
     content: `
-      <h3>Ключевые факты</h3>
+      <h3>📌 Ключевые факты</h3>
       <ul>
         <li><b>1917 (март)</b> — Февральская революция; образование Советов.</li>
         <li><b>1917 (октябрь)</b> — Октябрьская революция.</li>
         <li><b>25 марта 1918</b> — III Уставная грамота Рады БНР; провозглашение независимости БНР.</li>
-        <li><b>1 января 1919</b> — Манифест Временного рабоче-крестьянского правительства; провозглашение БССР.</li>
+        <li><b>1 января 1919</b> — Манифест Временного рабоче-крестьянского правительства; провозглашение ССРБ (с февраля 1919 — БССР).</li>
+        <li><b>февраль 1919</b> — провозглашение Литовско-Белорусской ССР (Литбел).</li>
         <li><b>1919–1920</b> — Советско-польская война.</li>
         <li><b>18 марта 1921</b> — Рижский мирный договор (Западная Беларусь — Польше).</li>
-        <li><b>1922</b> — БССР — одна из основательниц СССР.</li>
+        <li><b>30 октября 1921</b> — начало занятий Белорусского государственного университета (БГУ).</li>
+        <li><b>1922</b> — БССР — одна из основательниц СССР (30 декабря 1922).</li>
         <li><b>1924, 1926</b> — укрупнения БССР (возврат восточных территорий).</li>
-        <li><b>1920-е</b> — политика «белорусизации» (Белорусский государственный университет — 1921).</li>
-        <li><b>1930-е</b> — репрессии, коллективизация, индустриализация.</li>
-        <li><b>17 сентября 1939</b> — вступление РККА в Западную Беларусь.</li>
+        <li><b>1924 — конец 1920-х</b> — политика «белорусизации».</li>
+        <li><b>1925</b> — начало индустриализации; <b>1929</b> — начало сплошной коллективизации.</li>
+        <li><b>1937</b> — Конституция БССР; годы больших репрессий.</li>
+        <li><b>1 сентября 1939</b> — начало Второй мировой войны.</li>
+        <li><b>17 сентября 1939</b> — вступление РККА в Западную Беларусь; <b>2 и 14 ноября 1939</b> — включение Западной Беларуси в состав СССР и воссоединение с БССР.</li>
       </ul>
 
-      <h3>Связь с всемирной историей</h3>
+      <h3>🌍 Связь с всемирной историей</h3>
       <ul>
         <li>Провозглашение БНР — в контексте Брестского мира (3 марта 1918) и распада империй.</li>
         <li>Рижский мир (1921) — часть Версальско-Вашингтонской системы.</li>
         <li>17 сентября 1939 — после начала Второй мировой войны (1 сентября).</li>
       </ul>
 
-      <h3>Персоналии</h3>
+      <h3>👤 Персоналии и исторические портреты</h3>
       <table>
         <tr><th>Имя</th><th>Годы</th><th>Чем известен</th></tr>
         <tr><td>Язеп Лёсик</td><td>1883–1940</td><td>Первый председатель Рады БНР</td></tr>
@@ -612,37 +911,56 @@ const THEORY = [
     title: "Великая Отечественная война (1941–1945)",
     summary: "Оборона, оккупация, партизанское движение, освобождение",
     content: `
-      <h3>Ключевые факты</h3>
+      <h3>📌 Ключевые факты</h3>
       <ul>
         <li><b>22 июня 1941</b> — начало ВОВ; нападение Германии на СССР.</li>
-        <li><b>22 июня – 28 июля 1941</b> — оборона Брестской крепости.</li>
-        <li><b>июнь–июль 1941</b> — оборона Могилёва (23 дня).</li>
+        <li><b>22 июня 1941</b> — оборона Брестской крепости (гарнизон держался около месяца; начальник заставы А. Кижеватов, воспитанник полка П. Клыпа).</li>
+        <li><b>25–28 июня 1941</b> — оборона Минска.</li>
+        <li><b>3–26 июля 1941</b> — оборона Могилёва (23 дня).</li>
+        <li><b>6–10 июля 1941</b> — «Лепельский контрудар».</li>
+        <li><b>14 июля 1941</b> — первое применение «Катюши» (ж.-д. узел Орша).</li>
         <li><b>10 июля – 10 сентября 1941</b> — Смоленское сражение (в т.ч. на белорусских землях).</li>
-        <li><b>1941–1944</b> — оккупация Беларуси; генеральный округ «Беларусь».</li>
-        <li><b>1941–1944</b> — партизанское движение (более 370 тыс. партизан).</li>
-        <li><b>1943 (август–октябрь)</b> — «рельсовая война».</li>
-        <li><b>1943 (сентябрь)</b> — освобождение первого райцентра (Комарин).</li>
+        <li><b>1941–1944</b> — оккупация Беларуси; генеральный округ «Беларусь» (рейхскомиссариат «Остланд»); свыше 110 гетто, лагерь смерти Тростенец.</li>
+        <li><b>30 мая 1942</b> — Центральный штаб партизанского движения (ЦШПД); <b>сентябрь 1942</b> — Белорусский штаб партизанского движения (БШПД).</li>
+        <li><b>1941–1944</b> — партизанское движение: 374 тыс. партизан, более 70 тыс. подпольщиков.</li>
+        <li><b>конец 1943</b> — более 20 партизанских зон (около 60% территории).</li>
+        <li><b>22 марта 1943</b> — уничтожение деревни Хатынь (символ геноцида белорусского народа; более 12 тыс. сожжённых сёл).</li>
+        <li><b>август 1943, октябрь 1943, июнь 1944</b> — три этапа «рельсовой войны» (первый начался в ночь на 4 августа 1943).</li>
+        <li><b>23 сентября 1943</b> — освобождён первый райцентр — Комарин.</li>
+        <li><b>26 ноября 1943</b> — освобождён первый областной центр — Гомель.</li>
         <li><b>23 июня – 29 августа 1944</b> — операция «Багратион».</li>
         <li><b>3 июля 1944</b> — освобождение Минска (ныне День Независимости РБ).</li>
-        <li><b>28 июля 1944</b> — освобождение Бреста; завершение освобождения БССР.</li>
-        <li><b>9 мая 1945</b> — капитуляция Германии.</li>
-        <li><b>1945</b> — БССР — одна из стран-основательниц ООН.</li>
+        <li><b>28 июля 1944</b> — освобождение Бреста; завершение изгнания захватчиков с белорусской земли.</li>
+        <li><b>9 мая 1945</b> — капитуляция Германии (День Победы).</li>
+        <li><b>26 июня 1945</b> — подписание делегацией БССР Устава ООН (БССР — сооснователь ООН).</li>
       </ul>
 
-      <h3>Связь с всемирной историей</h3>
+      <h3>🌍 Связь с всемирной историей</h3>
       <ul>
         <li>ВМВ (1 сентября 1939 – 2 сентября 1945) — крупнейший конфликт в истории.</li>
         <li>Операция «Багратион» — одна из крупнейших наступательных операций в истории.</li>
-        <li>Холокост — уничтожение евреев на территории Беларуси (Минское гетто — 1941–1943).</li>
+        <li>Холокост — уничтожение евреев на территории Беларуси (Минское гетто — 1941–1943, около 100 тыс. жертв).</li>
+        <li>Каждый четвёртый житель Беларуси погиб в годы войны.</li>
       </ul>
 
-      <h3>Партизанское движение</h3>
+      <h3>🌿 Партизанское движение</h3>
       <table>
         <tr><th>Показатель</th><th>Значение</th></tr>
-        <tr><td>Партизан</td><td>более 370 тыс.</td></tr>
+        <tr><td>Партизан</td><td>374 тыс.</td></tr>
         <tr><td>Подпольщиков</td><td>более 70 тыс.</td></tr>
-        <tr><td>Партизанских бригад</td><td>около 200</td></tr>
-        <tr><td>Освобождённые зоны</td><td>более 60% территории</td></tr>
+        <tr><td>Партизанских зон</td><td>более 20 (около 60% территории, конец 1943)</td></tr>
+        <tr><td>Награждено орденами и медалями</td><td>более 140 тыс.; 91 — Герой Советского Союза</td></tr>
+      </table>
+
+      <h3>👤 Персоналии и исторические портреты</h3>
+      <table>
+        <tr><th>Имя</th><th>Годы</th><th>Чем известен</th></tr>
+        <tr><td>М. Ф. Шмырёв («Батька Минай»)</td><td>1891–1964</td><td>Командир отряда и 1-й Белорусской партизанской бригады, Герой Советского Союза</td></tr>
+        <tr><td>К. С. Заслонов</td><td>1910–1942</td><td>Подполье в Орше: «угольные» мины, вывод из строя паровозов</td></tr>
+        <tr><td>Ф. Э. Крылович</td><td>1922–1942</td><td>Подрыв эшелонов на станции Осиповичи (в т.ч. с танками «Тигр»)</td></tr>
+        <tr><td>Н. Гойшик</td><td>1926–1943</td><td>17-летний подрывник, бросился с миной под эшелон</td></tr>
+        <tr><td>М. Казей</td><td>1929–1944</td><td>14-летний разведчик партизанской бригады, Герой Советского Союза</td></tr>
+        <tr><td>В. И. Талаш</td><td>1844/1845–1946</td><td>74-летний партизан, герой оборонительных боёв (повесть К. Чорного «Погоня»)</td></tr>
       </table>
 
       <div class="highlight-box">
@@ -650,8 +968,10 @@ const THEORY = [
         <ul>
           <li>Освобождение Минска — <b>3 июля 1944</b>.</li>
           <li>Операция «Багратион» — <b>23 июня – 29 августа 1944</b>.</li>
-          <li>Комарин — первый освобождённый райцентр (сентябрь 1943).</li>
-          <li>БССР — сооснователь ООН (1945).</li>
+          <li>Комарин — первый освобождённый <b>райцентр</b> (23 сентября 1943), Гомель — первый <b>областной центр</b> (26 ноября 1943).</li>
+          <li>Хатынь сожжена <b>22 марта 1943</b> — до Курской битвы и «рельсовой войны».</li>
+          <li>БССР — сооснователь ООН (<b>26 июня 1945</b>).</li>
+          <li>ЦШПД — 30 мая 1942, БШПД — сентябрь 1942: не путай.</li>
         </ul>
       </div>
     `
@@ -661,23 +981,30 @@ const THEORY = [
     title: "Послевоенный период и современность (1945–наст.)",
     summary: "От восстановления до наших дней",
     content: `
-      <h3>Ключевые факты</h3>
+      <h3>📌 Ключевые факты</h3>
       <ul>
-        <li><b>1945–1950</b> — восстановление народного хозяйства.</li>
-        <li><b>1945</b> — БССР — член-основатель ООН.</li>
-        <li><b>1954</b> — БССР передана Крымская область (до 1954 в составе РСФСР).</li>
-        <li><b>1960–1980-е</b> — индустриализация, развитие МАЗа, МТЗ, БелАЗа.</li>
+        <li><b>1945–1950</b> — восстановление народного хозяйства (четвёртая пятилетка).</li>
+        <li><b>26 июня 1945</b> — БССР подписала Устав ООН — одна из стран-основателей ООН.</li>
+        <li><b>1951</b> — утверждён новый Государственный флаг БССР; <b>1955</b> — Гимн БССР.</li>
+        <li><b>1958</b> — БелАЗ (Жодино) выпустил первые самосвалы; развитие МТЗ, МАЗа.</li>
+        <li><b>1974</b> — Минску присвоено звание «Город-герой»; <b>1978</b> — Конституция БССР.</li>
         <li><b>26 апреля 1986</b> — авария на Чернобыльской АЭС.</li>
         <li><b>27 июля 1990</b> — Декларация о государственном суверенитете БССР.</li>
-        <li><b>25 августа 1991</b> — независимость Республики Беларусь.</li>
-        <li><b>8 декабря 1991</b> — Беловежские соглашения (распад СССР).</li>
-        <li><b>15 марта 1994</b> — принятие Конституции РБ.</li>
-        <li><b>1995</b> — введение нового государственного флага и герба (по результатам референдума).</li>
-        <li><b>1996, 2004</b> — референдумы.</li>
-        <li><b>2000</b> — создание Союзного государства Беларуси и России (Договор).</li>
+        <li><b>25 августа 1991</b> — Декларации придан статус конституционного закона (независимость де-юре).</li>
+        <li><b>19 сентября 1991</b> — страна названа Республикой Беларусь; утверждены старые государственные символы.</li>
+        <li><b>8 декабря 1991</b> — Беловежские соглашения: прекращение существования СССР, создание СНГ.</li>
+        <li><b>15 марта 1994</b> — принятие Конституции РБ (День Конституции); <b>10 июля 1994</b> — избран Президент А. Г. Лукашенко.</li>
+        <li><b>14 мая 1995</b> — референдум: новые флаг и герб, русский язык наравне с белорусским.</li>
+        <li><b>2 апреля 1996</b> — Сообщество Беларуси и России; <b>2 апреля 1997</b> — Союз Беларуси и России; <b>8 декабря 1999</b> — Договор о создании Союзного государства.</li>
+        <li><b>24 ноября 1996</b> — референдум: новая редакция Конституции, День Независимости перенесён на 3 июля.</li>
+        <li><b>17 октября 2004</b> — референдум (срок полномочий Президента).</li>
+        <li><b>2015</b> — начало действия Договора о Евразийском экономическом союзе (ЕАЭС).</li>
+        <li><b>2021</b> — введён в эксплуатацию первый блок Белорусской АЭС.</li>
+        <li><b>2022</b> — конституционный референдум (27 февраля); Закон «О геноциде белорусского народа».</li>
+        <li><b>2024</b> — Беларусь — партнёр БРИКС, полноправный член ШОС; первый космонавт суверенной Беларуси М. Василевская.</li>
       </ul>
 
-      <h3>Связь с всемирной историей</h3>
+      <h3>🌍 Связь с всемирной историей</h3>
       <ul>
         <li>«Холодная война» (1946–1991) — противостояние СССР и США.</li>
         <li>Чернобыль — крупнейшая техногенная катастрофа XX в.</li>
@@ -688,9 +1015,11 @@ const THEORY = [
         <b>⚠️ Ловушки ЦЭ/ЦТ:</b>
         <ul>
           <li>Чернобыль — <b>26 апреля 1986</b>.</li>
-          <li>Независимость — <b>25 августа 1991</b>.</li>
+          <li>Независимость — <b>25 августа 1991</b>; название «Республика Беларусь» — <b>19 сентября 1991</b>.</li>
           <li>Конституция РБ — <b>15 марта 1994</b>.</li>
           <li>Декларация о суверенитете — <b>27 июля 1990</b>.</li>
+          <li><b>Внимание:</b> в 1954 г. Крымская область передана не БССР, а <b>Украинской ССР</b>!</li>
+          <li>Договор о Союзном государстве — <b>8 декабря 1999</b> (не 2000).</li>
         </ul>
       </div>
     `
@@ -702,12 +1031,13 @@ const THEORY = [
    =================================================================== */
 const QUESTIONS = [
   // ============ Ancient ============
-  {id:"an1", topic:"ancient", q:"Какой возраст имеют древнейшие стоянки человека на территории Беларуси (Юровичи, Бердыж)?", o:["100–35 тыс. лет назад","10–5 тыс. лет назад","3–2 тыс. лет назад","VII в. до н.э."], c:0, e:"Юровичи и Бердыж — 100–35 тыс. лет назад."},
-  {id:"an2", topic:"ancient", q:"Какое племя проживало на севере белорусских земель (район Полоцка)?", o:["Дреговичи","Радимичи","Кривичи","Ятвяги"], c:2, e:"Кривичи (полочане) — север, район Полоцка и Витебска."},
-  {id:"an3", topic:"ancient", q:"Где проживали дреговичи?", o:["Полоцк, Витебск","Туров, Пинск","Гомель","Брест"], c:1, e:"Дреговичи — юг центра, район Турова и Пинска."},
-  {id:"an4", topic:"ancient", q:"Когда славяне начали расселяться на белорусских землях?", o:["III–IV вв. н.э.","V–VIII вв. н.э.","X–XI вв. н.э.","I–II вв. н.э."], c:1, e:"Расселение славян — V–VIII вв. н.э."},
-  {id:"an5", topic:"ancient", q:"Какое племя проживало в районе Гомеля?", o:["Кривичи","Дреговичи","Радимичи","Литовцы"], c:2, e:"Радимичи — восток, район Гомеля."},
-  {id:"an6", topic:"ancient", q:"Переход к железному веку на белорусских землях произошёл в:", o:["VII–VI вв. до н.э.","III в. н.э.","V в. н.э.","X в. н.э."], c:0, e:"Железный век — VII–VI вв. до н.э."},
+  {id:"an1", topic:"ancient", q:"Наиболее древняя стоянка первобытного человека на территории Беларуси (Юровичи) относится к:", o:["24-му тыс. до н.э.","100–35 тыс. лет назад","3-му тыс. до н.э.","VII в. до н.э."], c:0, e:"Юровичи (Калинковичский район) — 24-е тыс. до н.э., древнейшая стоянка; Бердыж (Чечерский район) — 22–21-е тыс. до н.э. Неандертальцы появились 100–35 тыс. лет назад."},
+  {id:"an2", topic:"ancient", q:"Какое племя проживало на севере белорусских земель (район Полоцка)?", o:["Дреговичи","Радимичи","Кривичи-полочане","Ятвяги"], c:2, e:"Кривичи-полочане — север, район Полоцка и Витебска."},
+  {id:"an3", topic:"ancient", q:"Где проживали дреговичи?", o:["Полоцк, Витебск","Туров, Пинск","Гомель","Брест"], c:1, e:"Дреговичи — юг центра (Припять), район Турова и Пинска."},
+  {id:"an4", topic:"ancient", q:"Когда славяне начали расселяться на территории Беларуси?", o:["III–IV вв. н.э.","VI–VIII вв. н.э.","X–XI вв. н.э.","I–II вв. н.э."], c:1, e:"Конец IV в. — славяне на юге Белорусского Полесья; VI–VIII вв. — расселение на территории Беларуси."},
+  {id:"an5", topic:"ancient", q:"Какое племя проживало в районе Гомеля (бассейн Сожа)?", o:["Кривичи","Дреговичи","Радимичи","Литовцы"], c:2, e:"Радимичи — восток, бассейн Сожа, район Гомеля."},
+  {id:"an6", topic:"ancient", q:"Хронологические рамки железного века на территории Беларуси:", o:["VII в. до н.э. — конец V в. н.э.","2-е тыс. до н.э. — конец VIII в. до н.э.","100–35 тыс. лет назад","VI–VIII вв. н.э."], c:0, e:"Железный век — VII в. до н.э. — конец V в. н.э. Бронзовый век — начало 2-го тыс. до н.э. — конец VIII в. до н.э."},
+  {id:"an7", topic:"ancient", q:"Когда на территории Беларуси появились первые индоевропейцы?", o:["середина 3-го тыс. до н.э.","24-е тыс. до н.э.","VIII–IX вв. н.э.","конец V в. н.э."], c:0, e:"Середина 3-го тыс. до н.э. — начало расселения индоевропейцев; в 3-м тыс. до н.э. — переход к животноводству и земледелию."},
 
   // ============ Polotsk: практический полигон (часть А и часть Б) ============
   {
@@ -720,7 +1050,7 @@ const QUESTIONS = [
     id:"po-a2", topic:"polotsk", part:"А", type:"single",
     q:"Битва на реке Немиге, после которой в летописи впервые упоминается Минск, произошла в:",
     o:["1021 г.","1044 г.","1067 г.","1101 г."], c:2,
-    e:`1067 г. — битва на Немиге, после которой впервые упомянут Минск. 1021 г. — битва на Судоме (Брячислав против Ярослава); 1044 г. — начало правления Всеслава; 1101 г. — смерть Всеслава и распад Полоцкой земли на уделы.`
+    e:`1067 г. — битва на Немиге, после которой впервые упомянут Минск. 1021 г. — битва на Судомири (Брячислав против Ярослава); 1044 г. — начало правления Всеслава; 1101 г. — смерть Всеслава и распад Полоцкой земли на уделы.`
   },
   {
     id:"po-a3", topic:"polotsk", part:"А", type:"single",
@@ -743,16 +1073,16 @@ const QUESTIONS = [
   {
     id:"po-a6", topic:"polotsk", part:"А", type:"multi",
     q:"Выберите два события, относящиеся ко времени правления Всеслава Брячиславича (1044–1101):",
-    o:["Битва на Немиге","Строительство Софийского собора в Полоцке","Битва на Судоме","Изготовление креста Лазаря Богши","Высылка полоцких князей в Византию"], c:[0,1],
-    e:`Верно: битва на Немиге (1067) и Софийский собор (XI в.) — время Всеслава. Битва на Судоме — 1021 г. (Брячислав); крест Лазаря Богши — 1161 г.; высылка полоцких князей — 1129 г. (Мстислав Великий).`
+    o:["Битва на Немиге","Строительство Софийского собора в Полоцке","Битва на Судомири","Изготовление креста Лазаря Богши","Высылка полоцких князей в Византию"], c:[0,1],
+    e:`Верно: битва на Немиге (1067) и Софийский собор (XI в.) — время Всеслава. Битва на Судомири — 1021 г. (Брячислав); крест Лазаря Богши — 1161 г.; высылка полоцких князей — 1129 г. (Мстислав Великий).`
   },
   {
     id:"po-b1", topic:"polotsk", part:"Б", type:"match",
     q:"Установите соответствие между исторической личностью и событием:",
     left:["1. Всеслав Брячиславич","2. Брячислав Изяславич","3. Владимир Мономах","4. Кирилл Туровский"],
-    right:["А. Битва на Судоме (1021)","Б. Епископская кафедра в Турове, автор «Слов» и молитв","В. Битва на Немиге (1067)","Г. Пленение минского князя Глеба (1119)"],
+    right:["А. Битва на Судомири (1021)","Б. Епископская кафедра в Турове, автор «Слов» и молитв","В. Битва на Немиге (1067)","Г. Пленение минского князя Глеба (1119)"],
     c:[2,0,3,1],
-    e:`Всеслав Брячиславич — битва на Немиге (1067); Брячислав Изяславич — битва на Судоме (1021); Владимир Мономах — пленение минского князя Глеба (1119); Кирилл Туровский — епископская кафедра в Турове, «Златоуст» XII в.`
+    e:`Всеслав Брячиславич — битва на Немиге (1067); Брячислав Изяславич — битва на Судомири (1021); Владимир Мономах — пленение минского князя Глеба (1119); Кирилл Туровский — епископская кафедра в Турове, «Златоуст» XII в.`
   },
   {
     id:"po-b2", topic:"polotsk", part:"Б", type:"match",
@@ -765,9 +1095,9 @@ const QUESTIONS = [
   {
     id:"po-b3", topic:"polotsk", part:"Б", type:"order",
     q:"Расположите события в хронологической последовательности (от раннего к позднему):",
-    o:["Крест Лазаря Богши","Битва на Судоме","Первое упоминание Турова","Смерть Всеслава Чародея","Битва на Немиге","Первое упоминание Полоцка"],
+    o:["Крест Лазаря Богши","Битва на Судомири","Первое упоминание Турова","Смерть Всеслава Чародея","Битва на Немиге","Первое упоминание Полоцка"],
     c:[5,2,1,4,3,0],
-    e:`Правильная последовательность: 862 — первое упоминание Полоцка; 980 — первое упоминание Турова; 1021 — битва на Судоме; 1067 — битва на Немиге; 1101 — смерть Всеслава; 1161 — крест Лазаря Богши.`
+    e:`Правильная последовательность: 862 — первое упоминание Полоцка; 980 — первое упоминание Турова; 1021 — битва на Судомири; 1067 — битва на Немиге; 1101 — смерть Всеслава; 1161 — крест Лазаря Богши.`
   },
   {
     id:"po-b4", topic:"polotsk", part:"Б", type:"multi",
@@ -825,13 +1155,13 @@ const QUESTIONS = [
   // ============ VOV ============
   {id:"vv1", topic:"vov", q:"Когда был освобождён Минск?", o:["28 июля 1944 г.","3 июля 1944 г.","22 июня 1941 г.","9 мая 1945 г."], c:1, e:"Минск освобождён 3 июля 1944 г."},
   {id:"vv2", topic:"vov", q:"Когда началась ВОВ?", o:["1 сентября 1939 г.","22 июня 1941 г.","23 июня 1944 г.","9 мая 1945 г."], c:1, e:"22 июня 1941 г."},
-  {id:"vv3", topic:"vov", q:"Сколько дней длилась оборона Брестской крепости?", o:["23 дня","37 дней","100 дней","10 дней"], c:1, e:"Оборона Брестской крепости — 22 июня – 28 июля 1941 г. (37 дней)."},
+  {id:"vv3", topic:"vov", q:"Сколько дней держался гарнизон Брестской крепости в июне 1941 г.?", o:["около месяца","23 дня","неделю","три дня"], c:0, e:"По учебнику гарнизон держался около месяца (германское командование планировало взять крепость к середине дня 22 июня). 23 дня — оборона Могилёва (3–26 июля 1941 г.)."},
   {id:"vv4", topic:"vov", q:"Как называлась операция по освобождению Беларуси в 1944 г.?", o:["Уран","Багратион","Кутузов","Румянцев"], c:1, e:"Операция «Багратион» — 23 июня – 29 августа 1944 г."},
   {id:"vv5", topic:"vov", q:"Когда был освобождён Брест?", o:["3 июля 1944 г.","28 июля 1944 г.","23 июня 1944 г.","9 мая 1945 г."], c:1, e:"Брест освобождён 28 июля 1944 г."},
-  {id:"vv6", topic:"vov", q:"Какой райцентр был освобождён первым в 1943 г.?", o:["Минск","Комарин","Гомель","Витебск"], c:1, e:"Комарин — сентябрь 1943 г."},
-  {id:"vv7", topic:"vov", q:"Сколько партизан действовало на территории Беларуси в 1941–1944 гг.?", o:["более 100 тыс.","более 200 тыс.","более 370 тыс.","более 500 тыс."], c:2, e:"Более 370 тыс. партизан."},
+  {id:"vv6", topic:"vov", q:"Какой райцентр был освобождён первым в 1943 г.?", o:["Минск","Комарин","Гомель","Витебск"], c:1, e:"Комарин — 23 сентября 1943 г., первый освобождённый райцентр. Гомель — 26 ноября 1943 г., первый освобождённый областной центр."},
+  {id:"vv7", topic:"vov", q:"Сколько партизан действовало на территории Беларуси в 1941–1944 гг.?", o:["более 100 тыс.","более 200 тыс.","374 тыс.","более 500 тыс."], c:2, e:"374 тыс. партизан и более 70 тыс. подпольщиков; к концу 1943 г. действовало более 20 партизанских зон (около 60% территории)."},
   {id:"vv8", topic:"vov", q:"Когда БССР стала членом-основателем ООН?", o:["1944 г.","1945 г.","1946 г.","1949 г."], c:1, e:"БССР — сооснователь ООН в 1945 г."},
-  {id:"vv9", topic:"vov", q:"Сколько дней длилась оборона Могилёва?", o:["10 дней","23 дня","37 дней","50 дней"], c:1, e:"Оборона Могилёва — 23 дня (июнь–июль 1941)."},
+  {id:"vv9", topic:"vov", q:"Сколько дней длилась оборона Могилёва?", o:["10 дней","23 дня","37 дней","50 дней"], c:1, e:"Оборона Могилёва — 23 дня (3–26 июля 1941 г.)."},
   {id:"vv10", topic:"vov", q:"Как называлась операция по освобождению Минска?", o:["Багратион","Минск-44","Уран","Висла"], c:0, e:"Минск освобождён в ходе операции «Багратион»."},
 
   // ============ Modern ============
@@ -841,82 +1171,318 @@ const QUESTIONS = [
   {id:"md4", topic:"modern", q:"Когда была принята Конституция Республики Беларусь?", o:["27 июля 1990 г.","25 августа 1991 г.","15 марта 1994 г.","1996 г."], c:2, e:"Конституция РБ — 15 марта 1994 г."},
   {id:"md5", topic:"modern", q:"Когда были подписаны Беловежские соглашения?", o:["27 июля 1990 г.","25 августа 1991 г.","8 декабря 1991 г.","1994 г."], c:2, e:"Беловежские соглашения — 8 декабря 1991 г."},
   {id:"md6", topic:"modern", q:"В каком году был подписан Договор о создании Союзного государства Беларуси и России?", o:["1996 г.","1999 г.","2000 г.","2004 г."], c:1, e:"Договор о создании Союзного государства — 8 декабря 1999 г."},
-  {id:"md7", topic:"modern", q:"В каком году БССР передали Крымскую область?", o:["1945 г.","1954 г.","1960 г.","1991 г."], c:1, e:"Крымская область передана БССР в 1954 г. (из РСФСР)."},
-  {id:"md8", topic:"modern", q:"Какой завод был построен в Жодино в 1950-х гг.?", o:["МТЗ","БелАЗ","МАЗ","Гомсельмаш"], c:1, e:"БелАЗ (Жодино) — 1950-е гг."},
+  {id:"md7", topic:"modern", q:"Куда была передана Крымская область в 1954 г.?", o:["В состав БССР","Из РСФСР в состав Украинской ССР","В состав Литвы","В состав РСФСР"], c:1, e:"В 1954 г. Крымская область была передана из состава РСФСР в состав Украинской ССР (не в БССР!)."},
+  {id:"md8", topic:"modern", q:"Когда был построен БелАЗ в Жодино?", o:["1958 г.","1946 г.","1950 г.","1965 г."], c:0, e:"БелАЗ построен в 1958 г. (первые самосвалы — 1961 г.); в 2021 г. изготовлен миллионный автомобиль."},
   {id:"md9", topic:"modern", q:"В каком году был открыт Белорусский государственный университет?", o:["1919 г.","1921 г.","1924 г.","1930 г."], c:1, e:"БГУ открыт в 1921 г."},
-  {id:"md10", topic:"modern", q:"Какое событие произошло 26 апреля 1986 года?", o:["Провозглашение независимости","Авария на ЧАЭС","Принятие Конституции","Референдум"], c:1, e:"Авария на Чернобыльской АЭС — 26 апреля 1986 г."}
+  {id:"md10", topic:"modern", q:"Какое событие произошло 26 апреля 1986 года?", o:["Провозглашение независимости","Авария на ЧАЭС","Принятие Конституции","Референдум"], c:1, e:"Авария на Чернобыльской АЭС — 26 апреля 1986 г."},
+
+  // ============ РТ/ЦЭ — вариант № 30416 (задания 2825–2862) ============
+  {id:"rt1", topic:"ancient", part:"А", type:"single",
+   q:"В первобытном обществе на белорусских землях занятием производящего хозяйства являлось(-ось):",
+   o:["Охота","Рыболовство","Собирательство","Животноводство"], c:3,
+   e:`Производящее хозяйство — это земледелие и животноводство. Охота, рыболовство, собирательство и добыча кремня относятся к присваивающему хозяйству.`},
+  {id:"rt2", topic:"polotsk", part:"А", type:"single",
+   q:"Киевский князь Мстислав совместно с семью князьями совершил поход в Полоцкую землю в:",
+   o:["998 г.","1067 г.","1101 г.","1127 г."], c:3,
+   e:`В 1127 г. киевский князь Мстислав Великий организовал поход коалиции русских князей в Полоцкую землю; в 1129 г. полоцкие князья были высланы в Византию. 1067 — битва на Немиге; 1101 — смерть Всеслава.`},
+  {id:"rt3", topic:"vkl", part:"А", type:"single",
+   q:"В 1398 г. Салинское соглашение с Тевтонским орденом заключил великий князь литовский:",
+   o:["Витовт","Ольгерд","Ягайло","Гедимин"], c:0,
+   e:`Салинское соглашение с Тевтонским орденом (1398) заключил Витовт; вскоре последовала битва на Ворскле (1399).`},
+  {id:"rt4", topic:"vkl", part:"А", type:"single",
+   q:"Определите характерную черту развития культуры белорусских земель во второй половине XIII–XIV в.:",
+   o:["Распространение ренессансной культуры","Развитие иконописи","Распространение идей Просвещения","Появление книгопечатания"], c:1,
+   e:`Во второй половине XIII–XIV в. развивалась иконопись. Ренессанс — XV–XVI вв.; идеи Просвещения — XVIII в.; книгопечатание — с 1517 г. (Ф. Скорина).`},
+  {id:"rt5", topic:"rp", part:"А", type:"single",
+   q:"Во второй половине XVII — первой половине XVIII в. в крестьянской и мещанской среде большой популярностью пользовались:",
+   o:["Библиотеки","Крепостные театры","Батлейки","Периодические издания"], c:2,
+   e:`Батлейка — народный кукольный театр, популярный в крестьянской и мещанской среде. Крепостные театры существовали при магнатских дворах.`},
+  {id:"rt6", topic:"vkl", part:"А", type:"single",
+   q:"Фрагмент документа: «Отдельное избрание и возведение на княжение великого князя литовского... должно быть отменено... Отныне король не будет созывать никаких других отдельных сеймов для чинов Короны и Литвы, но всегда только общий сейм...». О каком событии идёт речь?",
+   o:["Заключение Кревской унии","Заключение Виленско-Радомской унии","Заключение Люблинской унии","Заключение Городельской унии"], c:2,
+   e:`Это Люблинская уния 1569 г. — ликвидировала отдельное княжение в ВКЛ и создала общий сейм, образовав Речь Посполитую.`},
+  {id:"rt7", topic:"ri", part:"А", type:"single",
+   q:"На белорусских землях в составе Российской империи в конце XVIII — начале XIX в. царское правительство:",
+   o:["Проводило «разбор» шляхты","Отменило Статут ВКЛ 1588 г.","Ввело магдебургское право","Отменило крепостное право"], c:0,
+   e:`В конце XVIII — начале XIX в. проводился «разбор шляхты» — проверка документов о дворянстве. Статут ВКЛ отменён в 1840 г.; магдебургское право отменялось, а не вводилось; крепостное право отменено в 1861 г.`},
+  {id:"rt8", topic:"ri", part:"А", type:"single",
+   q:"Социально-экономическое развитие белорусских земель в первой половине XIX в. характеризовалось:",
+   o:["Разрушением сельской (крестьянской) общины","Появлением фабричного производства","Завершением промышленного переворота","Появлением мануфактурного производства"], c:3,
+   e:`В первой половине XIX в. появляются мануфактуры. Фабрики и промышленный переворот — вторая половина XIX в.; разрушение общины и рынок свободной рабочей силы — после отмены крепостного права (1861).`},
+  {id:"rt9", topic:"ri", part:"А", type:"single",
+   q:"Композитор, пианист, художник второй половины XIX в., выполнивший около 1000 зарисовок мест, связанных с жизнью известных людей и архитектурных памятников Беларуси, — это:",
+   o:["И. Носович","Н. Орда","И. Буйницкий","В. Ластовский"], c:1,
+   e:`Наполеон Орда — композитор, пианист и художник, автор около 1000 зарисовок архитектурных памятников Беларуси.`},
+  {id:"rt10", topic:"ri", part:"А", type:"single",
+   q:"В период первой российской буржуазно-демократической революции 1905–1907 гг. за свержение самодержавия путём революции выступала партия:",
+   o:["Октябристов","Кадетов","Большевиков","Русский окраинный союз (РОС)"], c:2,
+   e:`За свержение самодержавия путём революции выступали большевики. Октябристы и кадеты были за реформы и сохранение монархии.`},
+  {id:"rt11", topic:"bnr", part:"А", type:"single",
+   q:"В Минске 5–18 декабря 1917 г.:",
+   o:["Прошёл I Всебелорусский съезд","Создана Социалистическая Советская Республика Беларуси (ССРБ)","Создана ССР Литвы и Беларуси (Литбел)","Образован СССР"], c:0,
+   e:`5–18 декабря 1917 г. в Минске прошёл I Всебелорусский съезд. ССРБ создана 1 января 1919 г.; Литбел — в феврале 1919 г.; СССР — 30 декабря 1922 г.`},
+  {id:"rt12", topic:"vov", part:"А", type:"single",
+   q:"Определите особенность развития партизанского движения на оккупированной территории БССР в 1943 г.:",
+   o:["Создание Центрального штаба партизанского движения (ЦШПД)","Создание первых партизанских отрядов","Создание Белорусского штаба партизанского движения (БШПД)","Создание партизанских зон"], c:3,
+   e:`В 1943 г. массово создавались партизанские зоны (к концу года — более 20, около 60% территории). ЦШПД создан в 1942 г., БШПД — в сентябре 1942 г., первые отряды — в 1941 г.`},
+  {id:"rt13", topic:"vov", part:"А", type:"single",
+   q:"Праведники народов мира — это:",
+   o:["Бывшие офицеры польской армии, наделявшиеся землёй в Западной Беларуси","Участники партизанского движения","Участники подпольного движения","Люди, спасавшие лиц еврейской национальности во время войн"], c:3,
+   e:`Праведники народов мира — люди, спасавшие лиц еврейской национальности во время Второй мировой и Великой Отечественной войн.`},
+  {id:"rt14", topic:"vov", part:"Б", type:"match",
+   q:"Установите соответствие между деятелем культуры и произведением:",
+   left:["А) Я. Колас","Б) А. Кулешов","В) А. Адамович"],
+   right:["1) стихотворение «Прощай...»","2) повесть «Трясина»","3) роман-дилогия «Партизаны»"],
+   c:[1,0,2],
+   e:`Я. Колас — повесть «Трясина» («Дрыгва»); А. Кулешов — стихотворение «Прощай...»; А. Адамович — роман-дилогия «Партизаны» («Война под крышами», «Сыновья уходят в бой»).`},
+  {id:"rt15", topic:"modern", part:"А", type:"single",
+   q:"Для социально-экономического развития БССР во второй половине 1950-х — первой половине 1960-х гг. было(-а) характерно(-а):",
+   o:["Ухудшение условий жизни населения","Проведение приватизации","Проведение коллективизации","Урбанизация"], c:3,
+   e:`Во второй половине 1950-х — первой половине 1960-х гг. (период «оттепели») шла урбанизация, массовое жилищное строительство.`},
+  {id:"rt16", topic:"modern", part:"А", type:"single",
+   q:"Всенародное голосование по важнейшим вопросам развития страны — это:",
+   o:["Реформа","Аннексия","Референдум","Гласность"], c:2,
+   e:`Всенародное голосование — референдум.`},
+  {id:"rt17", topic:"rp", part:"А", type:"single",
+   q:"Белоцерковский договор между казаками и руководством Речи Посполитой был подписан в ... году:",
+   o:["1648 г.","1651 г.","1654 г.","1657 г."], c:1,
+   e:`Белоцерковский договор подписан в 1651 г. после Берестецкой битвы, ограничив реестр казаков.`},
+  {id:"rt18", topic:"ri", part:"А", type:"single",
+   q:"Способ аграрного хозяйствования, при котором право собственности на землю закрепляется за теми, кто её непосредственно обрабатывает, — это «____» путь развития капитализма в сельском хозяйстве:",
+   o:["Американский (фермерский)","Прусский","Отработочный","Экстенсивный"], c:0,
+   e:`Американский (фермерский) путь — земля принадлежит тем, кто её обрабатывает. Прусский путь — сохранение помещичьего землевладения.`},
+  {id:"rt19", topic:"ri", part:"Б", type:"order",
+   q:"Установите последовательность событий XIX–XX вв. (от раннего к позднему):",
+   o:["Начало столыпинской аграрной реформы","Отмена действия Статута ВКЛ в Минской, Гродненской и Виленской губерниях","Начало коллективизации в БССР","Октябрьская революция в России"],
+   c:[1,0,3,2],
+   e:`1840 — отмена Статута ВКЛ; 1906 — начало столыпинской реформы; 1917 — Октябрьская революция; 1929 — начало коллективизации в БССР.`},
+  {id:"rt20", topic:"ancient", part:"Б", type:"match",
+   q:"Вставьте пропущенные слова (восточные славяне на белорусских землях в IX — середине XIII в.):",
+   left:["А) Земля принадлежала","Б) Главными занятиями были","В) Сбор мёда диких пчёл — это"],
+   right:["1) община","2) бортничество","3) земледелие и животноводство","4) охота и рыболовство","5) шорное ремесло","6) отдельные семьи"],
+   c:[0,2,1],
+   e:`Земля принадлежала общине; главные занятия — земледелие и животноводство; сбор мёда диких пчёл — бортничество.`},
+  {id:"rt21", topic:"vkl", part:"Б", type:"match",
+   q:"Вставьте пропущенные слова (белорусские земли в XIV–XV вв.):",
+   left:["А) Господствовали ... отношения","Б) Общество делилось на","В) Права и обязанности сословий"],
+   right:["1) родоплеменные","2) феодальные","3) сословия","4) парафин","5) закреплялись законом","6) не передавались по наследству"],
+   c:[1,2,4],
+   e:`В XIV–XV вв. господствовали феодальные отношения; общество делилось на сословия — группы с правами и обязанностями, которые закреплялись законом.`},
+  {id:"rt22", topic:"vkl", part:"Б", type:"match",
+   q:"Вставьте пропущенные слова (аграрная реформа в ВКЛ в середине XVI в.):",
+   left:["А) Реформа привела к ... сельского хозяйства","Б) Налоги стали взиматься с","В) Закрепление крестьян за наделами свидетельствовало об"],
+   right:["1) повышение прибыльности","2) упадок","3) волока","4) община","5) усиление закрепощения","6) ослабление закрепощения"],
+   c:[0,2,4],
+   e:`«Устава на волоки» (1557) повысила прибыльность хозяйства; налоги взимались с волоки, а не с дыма; закрепление крестьян за наделами усиливало закрепощение.`},
+  {id:"rt23", topic:"ri", part:"Б", type:"match",
+   q:"Вставьте пропущенные слова (рабочее движение в конце XIX в.):",
+   left:["А) Переход рабочих к ... требованиям","Б) ... движения привело к образованию политических партий","В) В 1898 г. на съезде в Минске было провозглашено создание"],
+   right:["1) от экономических к политическим","2) от политических к экономическим","3) РСДРП","4) ПСР","5) упадок крестьянского","6) нарастание рабочего"],
+   c:[0,5,2],
+   e:`Рабочие переходили от экономических требований к политическим; нарастание рабочего движения привело к созданию партий; в 1898 г. в Минске провозглашено создание РСДРП.`},
+  {id:"rt24", topic:"ancient", part:"Б", type:"multi",
+   q:"Определите три правильных утверждения относительно славянских союзов племён на белорусских землях в Раннем средневековье:",
+   o:["Древнейшим городом дреговичей был Туров","Кривичи селились в среднем течении р. Припять","Самым крупным славянским союзом племён были кривичи","Древнейшим городом радимичей был Менск (Минск)","Для каждого союза племён был характерен свой тип женских украшений"], c:[0,2,4],
+   e:`Верно: Туров — древнейший город дреговичей; кривичи — крупнейший союз племён; каждому союзу был присущ свой тип женских украшений. Кривичи жили на севере (Полоцк, Витебск), а не в среднем течении Припяти (там — дреговичи); древнейший город радимичей — Гомель.`},
+  {id:"rt25", topic:"polotsk", part:"Б", type:"multi",
+   q:"Определите три правильных утверждения относительно распространения христианства на белорусских землях в конце X — XIII в.:",
+   o:["Отсутствовали епархии","Христианство было принято в качестве государственной религии","Активно строились церкви и монастыри","Сложилось двоеверие","Митрополит подчинялся папе римскому"], c:[1,2,3],
+   e:`Верно: христианство стало государственной религией; строились церкви и монастыри; сложилось двоеверие. Епархии существовали (Полоцкая — ок. 992, Туровская — 1005); митрополит подчинялся Константинополю.`},
+  {id:"rt26", topic:"vkl", part:"Б", type:"multi",
+   q:"Определите три правильных утверждения относительно татар, проживавших в ВКЛ:",
+   o:["Исповедовали иудаизм","Вели кочевой образ жизни","Приглашались в ВКЛ великими князьями литовскими","Строили для себя мечети","Исповедовали ислам"], c:[2,3,4],
+   e:`Верно: татары приглашались в ВКЛ великими князьями, строили мечети, исповедовали ислам. Они переходили к оседлому образу жизни (не кочевому) и не исповедовали иудаизм.`},
+  {id:"rt27", topic:"vkl", part:"Б", type:"multi",
+   q:"Определите три характерные черты государственного строя ВКЛ в конце XIII — XIV в.:",
+   o:["Княжество управлялось католической церковью","Княжество являлось монархией","Некоторые волости управлялись великокняжескими наместниками","Существовало вече в городах","Формировался общегосударственный (вальный) сейм"], c:[1,2,3],
+   e:`Верно: ВКЛ было монархией; часть волостей управлялась наместниками; в городах существовало вече. Вальный сейм сформировался позже — в XV–XVI вв.; церковь не управляла княжеством.`},
+  {id:"rt28", topic:"ri", part:"Б", type:"multi",
+   q:"Определите три характерные черты социально-экономического положения белорусских земель во второй половине XIX в.:",
+   o:["Создание коллективных хозяйств","Расположение предприятий преимущественно в сельской местности","Развитие отраслей промышленности, связанных с переработкой продуктов земледелия","Интенсивное строительство речных каналов","Строительство железных дорог"], c:[1,2,4],
+   e:`Во второй половине XIX в. предприятия размещались преимущественно в сельской местности, развивалась переработка продуктов земледелия, строились железные дороги. Коллективные хозяйства — XX в.; каналы активно строили в конце XVIII — начале XIX в.`},
+  {id:"rt29", topic:"bnr", part:"Б", type:"multi",
+   q:"Определите три мероприятия новой экономической политики (нэпа), проводимой в БССР с 1921 г.:",
+   o:["Разрешение свободы торговли","Введение всеобщей трудовой повинности","Проведение полной национализации промышленных предприятий","Допущение иностранного капитала","Введение продналога"], c:[0,3,4],
+   e:`Мероприятия нэпа: свобода торговли, допущение иностранного капитала (концессии), продналог. Всеобщая трудовая повинность и полная национализация — черты «военного коммунизма».`},
+  {id:"rt30", topic:"bnr", part:"Б", type:"multi",
+   q:"Определите две характерные черты общественно-политической жизни Западной Беларуси в составе Польши в 1921–1939 гг.:",
+   o:["Деятельность польской тайной политической полиции","Запрет белорусам участвовать в выборах в сейм","Проведение польскими властями коренизации","Развёртывание национально-освободительного движения","Отсутствие общественных организаций"], c:[0,3],
+   e:`Верно: действовала польская тайная политика и развёртывалось национально-освободительное движение. Коренизация — политика БССР; белорусы участвовали в выборах; общественные организации существовали.`},
+  {id:"rt31", topic:"bnr", part:"Б", type:"multi",
+   q:"Определите три характерные черты индустриализации в БССР:",
+   o:["Разрабатывались пятилетние планы развития","Вводился в денежное обращение советский червонец","Началось проведение приватизации","Появились новые отрасли промышленности","Развивалась текстильная промышленность"], c:[0,3,4],
+   e:`Черты индустриализации: пятилетние планы, появление новых отраслей промышленности, развитие текстильной промышленности. Червонец введён в годы нэпа; приватизация — в 1990-е гг.`},
+  {id:"rt32", topic:"modern", part:"Б", type:"multi",
+   q:"Определите три позиции, свидетельствующие о проявлении рыночных отношений в Республике Беларусь в первой половине 1990-х гг.:",
+   o:["Введение свободных цен на подавляющее большинство товаров и услуг","Существование только государственного сектора экономики","Становление коммерческих структур","Национализация промышленности","Разрешение аренды"], c:[0,2,4],
+   e:`О рыночных отношениях свидетельствовали: введение свободных цен, становление коммерческих структур, разрешение аренды. Существование только госсектора и национализация — противоположные явления.`},
+  {id:"rt33", topic:"vkl", part:"Б", type:"match",
+   q:"Установите соответствие между событием и датой:",
+   left:["А) Создание Виленской иезуитской академии","Б) Битва на р. Ворскле между войсками Витовта и Золотой Орды","В) Перенос Гедимином столицы ВКЛ в Вильно","Г) «Немой» сейм в Речи Посполитой"],
+   right:["1) 1323 г.","2) 1399 г.","3) 1579 г.","4) 1717 г."],
+   c:[2,1,0,3],
+   e:`Виленская иезуитская академия — 1579 г.; битва на Ворскле — 1399 г.; перенос столицы в Вильно — 1323 г.; «немой» сейм — 1717 г.`},
+  {id:"rt34", topic:"rp", part:"Б", type:"match",
+   q:"Установите соответствие между характеристикой и деятелем культуры:",
+   left:["А) Инженер, автор книги «Великое искусство артиллерии»","Б) Разработчик шрифта — основы современных кириллических шрифтов","В) Шляхтич, издавший в собственной типографии «Евангелие» на старобелорусском языке"],
+   right:["1) И. Копиевич","2) К. Семенович","3) В. Тяпинский","4) Симеон Полоцкий"],
+   c:[1,0,2],
+   e:`«Великое искусство артиллерии» — Казимир Семенович; новый шрифт (гражданский) — Илья Копиевич; Тяпинское «Евангелие» — Василий Тяпинский.`},
+  {id:"rt35", topic:"bnr", part:"Б", type:"match",
+   q:"Установите соответствие между определением и термином:",
+   left:["А) Система заготовок продовольствия в период «военного коммунизма», когда крестьяне сдавали все излишки","Б) Политика при создании колхозов, связанная с преследованием крестьян по имущественному признаку","В) Продажа мелкими участками помещичьей и государственной земли лицам польской национальности в Западной Беларуси"],
+   right:["1) парцелляция","2) комасация","3) раскулачивание","4) продразвёрстка"],
+   c:[3,2,0],
+   e:`Продразвёрстка (А); раскулачивание (Б); парцелляция (В). Комасация — объединение разрозненных участков в одно хозяйство.`},
+  {id:"rt36", topic:"modern", part:"Б", type:"match",
+   q:"Установите соответствие между событием и датой (Республика Беларусь):",
+   left:["А) Подписание Беларусью и Россией Договора о создании Союзного государства","Б) Референдум о поправках в Конституцию (срок полномочий Президента)","В) Референдум, одним из вопросов которого была экономическая интеграция с Россией","Г) Референдум о государственном статусе русского языка"],
+   right:["1) 1995 г.","2) 1999 г.","3) 2004 г.","4) 2006 г."],
+   c:[1,2,0,0],
+   e:`Договор о создании Союзного государства — 1999 г.; референдум о сроке полномочий Президента — 2004 г.; референдумы об экономической интеграции с Россией и о статусе русского языка — 1995 г.`}
 ];
 
 /* ===================================================================
    БЛОК 3. ДАТЫ ДЛЯ ФЛЕШ-КАРТОЧЕК
    =================================================================== */
 const DATES = [
-  {f:"100–35 тыс. лет назад", b:"Первые стоянки человека (Юровичи, Бердыж)"},
-  {f:"V–VIII вв. н.э.", b:"Расселение славян на белорусских землях"},
+  {f:"40–35 тыс. лет назад", b:"Появление человека современного типа (кроманьонца)"},
+  {f:"24-е тыс. до н.э.", b:"Юровичи — наиболее древняя стоянка человека"},
+  {f:"22–21-е тыс. до н.э.", b:"Память-стоянка Бердыж"},
+  {f:"3-е тыс. до н.э.", b:"Переход к животноводству и земледелию"},
+  {f:"середина 3-го тыс. до н.э.", b:"Начало расселения индоевропейцев"},
+  {f:"2-е тыс. до н.э. — нач. VIII в. до н.э.", b:"Бронзовый век"},
+  {f:"VII в. до н.э. — V в. н.э.", b:"Железный век"},
+  {f:"конец IV в.", b:"Присутствие славян на юге Белорусского Полесья"},
+  {f:"VI–VIII вв.", b:"Расселение славян на территории Беларуси"},
+  {f:"VIII–IX вв.", b:"Племенные союзы: полочане, дреговичи, радимичи"},
   {f:"862 г.", b:"Первое упоминание Полоцка"},
   {f:"980 г.", b:"Первое упоминание Турова; гибель Рогволода"},
-  {f:"988 г.", b:"Крещение Руси"},
-  {f:"992 г.", b:"Основание Полоцкой епархии"},
-  {f:"1005 г.", b:"Основание Туровской епархии"},
-  {f:"1019 г.", b:"Первое упоминание Берестья"},
-  {f:"1021 г.", b:"Битва на Судоме"},
-  {f:"XI в.", b:"Софийский собор в Полоцке"},
+  {f:"988 г.", b:"Крещение Руси; начало княжения Изяслава в Полоцке"},
+  {f:"ок. 992 г.", b:"Создание Полоцкой епархии"},
+  {f:"1003–1044", b:"Княжение Брячислава Изяславича"},
+  {f:"1005 г.", b:"Создание Туровской епархии"},
+  {f:"1019 г.", b:"Первое упоминание Берестья (Бреста)"},
+  {f:"1021 г.", b:"Поход Брячислава на Новгород; битва на р. Судомирь"},
+  {f:"середина XI в.", b:"Софийский собор в Полоцке"},
   {f:"1044–1101", b:"Правление Всеслава Чародея (57 лет)"},
-  {f:"1067 г.", b:"Битва на Немиге; первое упоминание Минска"},
-  {f:"1128 г.", b:"Первое упоминание Гродно"},
+  {f:"3 марта 1067 г.", b:"Битва на Немиге; первое упоминание Минска"},
+  {f:"1103 г.", b:"Первое упоминание Витебска"},
+  {f:"1116 г.", b:"Впервые упомянут князь Городни (Гродно) Всеволодко"},
   {f:"1129 г.", b:"Высылка полоцких князей в Византию"},
   {f:"1161 г.", b:"Крест Лазаря Богши"},
-  {f:"1173 г.", b:"Смерть Евфросинии Полоцкой"},
-  {f:"ок. 1182 г.", b:"Смерть Кирилла Туровского"},
-  {f:"1230–1263", b:"Правление Миндовга"},
-  {f:"1253 г.", b:"Коронация Миндовга"},
+  {f:"1173 г.", b:"Смерть Евфросинии Полоцкой (в Иерусалиме)"},
+  {f:"1235 г.", b:"«Литва Миндовга» — первое упоминание в летописи"},
+  {f:"1253–1263", b:"Правление Миндовга (коронация 1253, Новогрудок)"},
   {f:"1316–1341", b:"Правление Гедимина"},
+  {f:"1323 г.", b:"Столица ВКЛ перенесена в Вильно"},
+  {f:"1326–1341", b:"Юрий Гедиминович в Витебске"},
+  {f:"1348 г.", b:"Битва на р. Стрива"},
   {f:"1345–1377", b:"Правление Ольгерда"},
-  {f:"1362 г.", b:"Победа на Синих Водах"},
+  {f:"1362 г.", b:"Победа Ольгерда на Синих Водах"},
   {f:"1385 г.", b:"Кревская уния"},
-  {f:"1386 г.", b:"Ягайло — король Польши"},
-  {f:"1392 г.", b:"Островское соглашение; Витовт — великий князь"},
-  {f:"1410 г.", b:"Грюнвальдская битва"},
+  {f:"1386 г.", b:"Ягайло — король Польши (Владислав II)"},
+  {f:"1390 г.", b:"Берестье получило магдебургское право"},
+  {f:"1399 г.", b:"Битва на р. Ворскла"},
+  {f:"1410 г.", b:"Грюнвальдская битва (15 июля)"},
   {f:"1413 г.", b:"Городельская уния"},
+  {f:"1432–1439", b:"Династическая война в ВКЛ"},
+  {f:"1447 г.", b:"Привилей Казимира"},
+  {f:"1468 г.", b:"Судебник Казимира"},
+  {f:"1492 г.", b:"Привилей Александра"},
+  {f:"1499 г.", b:"Магдебургское право Минска"},
+  {f:"1506 г.", b:"Победа под Клецком"},
+  {f:"1514 г.", b:"Битва под Оршей (8 сентября)"},
+  {f:"6 августа 1517 г.", b:"«Псалтирь» Франциска Скорины (Прага)"},
   {f:"1529, 1566, 1588", b:"Статуты ВКЛ"},
-  {f:"1 июля 1569 г.", b:"Люблинская уния"},
-  {f:"1573 г.", b:"«Генриковы артикулы»"},
-  {f:"1596 г.", b:"Брестская церковная уния"},
-  {f:"1648–1651", b:"Восстание Хмельницкого"},
+  {f:"1557 г.", b:"«Устава на волоки»"},
+  {f:"1563 г.", b:"Взятие Полоцка войсками Ивана IV"},
+  {f:"январь 1564 г.", b:"Битва под Чашниками"},
+  {f:"1569 г.", b:"Люблинская уния (1 июля)"},
+  {f:"1579 г.", b:"Отбит Полоцк; Виленская академия"},
+  {f:"1581 г.", b:"Главный Трибунал ВКЛ"},
+  {f:"1588 г.", b:"III Статут ВКЛ"},
+  {f:"1596 г.", b:"Берестейская церковная уния"},
+  {f:"1605 г.", b:"Битва под Кирхгольмом"},
+  {f:"1623 г.", b:"Восстание в Витебске"},
+  {f:"1632–1634", b:"Смоленская война"},
+  {f:"1648–1651", b:"Восстание Хмельницкого; битвы под Лоевом"},
   {f:"1654–1667", b:"Война с Московским государством"},
-  {f:"1772, 1793, 1795", b:"Разделы Речи Посполитой"},
-  {f:"1791 г.", b:"Конституция 3 мая"},
-  {f:"1794 г.", b:"Восстание Костюшко"},
+  {f:"30 января 1667 г.", b:"Андрусовское перемирие"},
+  {f:"28 сентября 1708 г.", b:"Битва при Лесной (Дракуле)"},
+  {f:"1773 г.", b:"Комиссия национального образования"},
+  {f:"3 мая 1791 г.", b:"Конституция Речи Посполитой"},
+  {f:"1793 г.", b:"II раздел Речи Посполитой"},
+  {f:"24 марта 1794 г.", b:"Восстание Костюшко; Краковский акт"},
+  {f:"1794 г.", b:"Указ об установлении черты еврейской оседлости"},
+  {f:"1795 г.", b:"III раздел; белорусские земли — в составе России"},
   {f:"1812 г.", b:"Отечественная война"},
-  {f:"1830–1831", b:"Восстание (после — закрытие Виленского университета)"},
+  {f:"1817–1823", b:"Движение филоматов и филаретов"},
+  {f:"1830–1831", b:"Восстание; «План Саквена»"},
+  {f:"1831 г.", b:"Отмена Статута ВКЛ в Витебской и Могилёвской губерниях"},
   {f:"1832 г.", b:"Закрытие Виленского университета"},
-  {f:"1839 г.", b:"Полоцкий церковный собор (ликвидация униатства)"},
-  {f:"1840 г.", b:"Отмена Статута ВКЛ"},
-  {f:"1861 г.", b:"Отмена крепостного права"},
-  {f:"1863–1864", b:"Восстание Калиновского"},
-  {f:"1891 г.", b:"«Дудка беларуская» Богушевича"},
-  {f:"1905 г.", b:"Манифест 17 октября; легализация партий"},
-  {f:"25 марта 1918 г.", b:"Независимость БНР (III Уставная грамота)"},
-  {f:"1 января 1919 г.", b:"Провозглашение БССР"},
+  {f:"1839 г.", b:"Полоцкий собор; начало реформы Киселёва"},
+  {f:"1840 г.", b:"Отмена Статута ВКЛ; реформа государственной деревни"},
+  {f:"1844–1857", b:"Инвентарная реформа"},
+  {f:"19 февраля 1861 г.", b:"Манифест об отмене крепостного права"},
+  {f:"1862–1863", b:"Газета «Мужыцкая правда»"},
+  {f:"1863–1864", b:"Восстание под руководством К. Калиновского"},
+  {f:"1884 г.", b:"Начало выхода газеты «Гомон»"},
+  {f:"1897 г.", b:"Первая перепись населения Российской империи"},
+  {f:"1903 г.", b:"Окончательное оформление БСГ"},
+  {f:"1905–1907", b:"Первая революция; I Всебелорусский съезд (декабрь 1905)"},
+  {f:"17 октября 1905 г.", b:"Манифест Николая II"},
+  {f:"1906–1915", b:"Выход газеты «Наша Ніва»"},
+  {f:"1911 г.", b:"Введение земств в белорусских губерниях"},
+  {f:"1 августа 1914 г.", b:"Германия объявила войну России"},
+  {f:"сентябрь 1915 — февраль 1918", b:"Оборона Сморгони"},
+  {f:"февраль 1917 г.", b:"Февральская революция"},
+  {f:"3 марта 1918 г.", b:"Брестский мир"},
+  {f:"25 марта 1918 г.", b:"III Уставная грамота — независимость БНР"},
+  {f:"1 января 1919 г.", b:"Провозглашение ССРБ (с февраля 1919 — БССР)"},
+  {f:"февраль 1919 г.", b:"Провозглашение Литбела"},
+  {f:"31 июля 1920 г.", b:"Второе провозглашение ССРБ"},
   {f:"18 марта 1921 г.", b:"Рижский мир"},
-  {f:"1921 г.", b:"Основание БГУ"},
+  {f:"30 октября 1921 г.", b:"Начало занятий БГУ"},
   {f:"30 декабря 1922 г.", b:"Образование СССР"},
-  {f:"1924, 1926", b:"Укрупнения БССР"},
+  {f:"1924 г.", b:"I укрупнение БССР; начало белорусизации"},
+  {f:"1925 г.", b:"Начало индустриализации в БССР"},
+  {f:"1926 г.", b:"II укрупнение БССР"},
+  {f:"1929 г.", b:"Начало сплошной коллективизации; открыта БАН"},
+  {f:"1937 г.", b:"Конституция БССР"},
+  {f:"1 сентября 1939 г.", b:"Начало Второй мировой войны"},
   {f:"17 сентября 1939 г.", b:"Вход РККА в Западную Беларусь"},
-  {f:"22 июня 1941 г.", b:"Начало ВОВ"},
-  {f:"22 июня – 28 июля 1941", b:"Оборона Брестской крепости"},
-  {f:"сентябрь 1943 г.", b:"Освобождение Комарина"},
-  {f:"23 июня – 29 августа 1944", b:"Операция «Багратион»"},
+  {f:"2 ноября 1939 г.", b:"Включение Западной Беларуси в состав СССР"},
+  {f:"22 июня 1941 г.", b:"Начало ВОВ; оборона Брестской крепости"},
+  {f:"25–28 июня 1941 г.", b:"Оборона Минска"},
+  {f:"3–26 июля 1941 г.", b:"Оборона Могилёва"},
+  {f:"14 июля 1941 г.", b:"Первое применение «Катюши» (Орша)"},
+  {f:"30 мая 1942 г.", b:"Создание ЦШПД"},
+  {f:"22 марта 1943 г.", b:"Катастрофа Хатыни"},
+  {f:"ночь на 4 августа 1943 г.", b:"Начало «рельсовой войны»"},
+  {f:"23 сентября 1943 г.", b:"Комарин — первый освобождённый райцентр"},
+  {f:"26 ноября 1943 г.", b:"Гомель — первый освобождённый областной центр"},
+  {f:"23 июня — 29 августа 1944 г.", b:"Операция «Багратион»"},
   {f:"3 июля 1944 г.", b:"Освобождение Минска"},
   {f:"28 июля 1944 г.", b:"Освобождение Бреста"},
-  {f:"1945 г.", b:"БССР — сооснователь ООН"},
-  {f:"1954 г.", b:"Передача Крымской области БССР"},
+  {f:"9 мая 1945 г.", b:"День Победы"},
+  {f:"26 июня 1945 г.", b:"БССР подписала Устав ООН"},
+  {f:"1951 г.", b:"Утверждён Государственный флаг БССР"},
+  {f:"1955 г.", b:"Утверждён Гимн БССР"},
+  {f:"1958 г.", b:"Первые самосвалы БелАЗа (Жодино)"},
+  {f:"1974 г.", b:"Минску присвоено звание «Город-герой»"},
+  {f:"14 апреля 1978 г.", b:"Конституция БССР"},
   {f:"26 апреля 1986 г.", b:"Авария на ЧАЭС"},
-  {f:"27 июля 1990 г.", b:"Декларация о суверенитете БССР"},
-  {f:"25 августа 1991 г.", b:"Независимость Республики Беларусь"},
+  {f:"27 июля 1990 г.", b:"Декларация о государственном суверенитете"},
+  {f:"17 марта 1991 г.", b:"Всесоюзный референдум о сохранении СССР"},
+  {f:"25 августа 1991 г.", b:"Декларация о суверенитете — конституционный закон"},
+  {f:"19 сентября 1991 г.", b:"Новое название страны — Республика Беларусь"},
   {f:"8 декабря 1991 г.", b:"Беловежские соглашения"},
   {f:"15 марта 1994 г.", b:"Конституция Республики Беларусь"},
-  {f:"8 декабря 1999 г.", b:"Договор о Союзном государстве РБ и РФ"}
+  {f:"10 июля 1994 г.", b:"А.Г. Лукашенко избран Президентом"},
+  {f:"14 мая 1995 г.", b:"Республиканский референдум"},
+  {f:"8 декабря 1999 г.", b:"Договор о создании Союзного государства"},
+  {f:"2021 г.", b:"Введён в строй первый блок Белорусской АЭС"}
 ];
 
 /* ===================================================================
@@ -981,8 +1547,25 @@ function saveState() {
 /* ===================================================================
    БЛОК 5. РОУТИНГ И РЕНДЕР
    =================================================================== */
+function toggleTheme() {
+  const root = document.documentElement;
+  const cur = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  root.setAttribute('data-theme', cur);
+  const btn = document.getElementById('themeToggle');
+  if (btn) btn.textContent = cur === 'light' ? '☀️' : '🌙';
+  try { localStorage.setItem('theme', cur); } catch (e) {}
+}
+try {
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    setTimeout(() => { const b = document.getElementById('themeToggle'); if (b) b.textContent = '☀️'; }, 50);
+  }
+} catch (e) {}
+
 function showPage(page, opts = {}) {
   state.page = page;
+  if (page === 'theory' && opts.theoryId === undefined) state.theoryId = null;
   if (opts.theoryId !== undefined) state.theoryId = opts.theoryId;
   if (opts.practiceTopic !== undefined) {
     state.practiceTopic = opts.practiceTopic;
@@ -1147,27 +1730,27 @@ function renderHome() {
       <div class="grid">
         <div class="topic-card" onclick="showPage('theory')">
           <h3>📖 Теория</h3>
-          <p>Конспекты по 8 разделам с ключевыми фактами, персоналиями и ловушками</p>
+          <p>📚 Конспекты по 8 разделам с ключевыми фактами, персоналиями и ловушками</p>
         </div>
         <div class="topic-card" onclick="showPage('practice')">
           <h3>✏️ Практика</h3>
-          <p>Тесты по темам с объяснениями — как на реальном ЦЭ/ЦТ</p>
+          <p>📝 Тесты по темам с объяснениями — как на реальном ЦЭ/ЦТ</p>
         </div>
         <div class="topic-card" onclick="showPage('exam')">
           <h3>⏱ Экзамен</h3>
-          <p>30 вопросов · 30 минут · как на настоящем экзамене</p>
+          <p>🎓 30 вопросов · 30 минут · как на настоящем экзамене</p>
         </div>
         <div class="topic-card" onclick="showPage('flash')">
           <h3>🃏 Тренажёр дат</h3>
-          <p>${DATES.length} флеш-карточек: дата → событие</p>
+          <p>📅 ${DATES.length} флеш-карточек: дата → событие</p>
         </div>
         <div class="topic-card" onclick="showPage('stats')">
           <h3>📊 Прогресс</h3>
-          <p>Статистика по темам и история попыток</p>
+          <p>📈 Статистика по темам и история попыток</p>
         </div>
         <div class="topic-card" onclick="showPage('practice',{practiceTopic:'all'})">
           <h3>🎯 Смешанный тест</h3>
-          <p>Все ${totalQ} вопросов вперемешку</p>
+          <p>🔀 Все ${totalQ} вопросов вперемешку</p>
         </div>
       </div>
     </div>
@@ -1200,7 +1783,7 @@ function renderTheoryList() {
           const acc = stat && stat.answered > 0 ? Math.round(stat.correct / stat.answered * 100) + "%" : "—";
           return `
             <div class="topic-card" onclick="showPage('theory',{theoryId:'${t.id}'})">
-              <h3>${t.title}</h3>
+              <h3>${TOPIC_EMOJI[t.id] || "📖"} ${t.title}</h3>
               <p>${t.summary}</p>
               <span class="badge">${count} вопр. · ${acc}</span>
             </div>`;
@@ -1215,11 +1798,11 @@ function renderTheoryDetail() {
   if (!t) return `<div class="card"><div class="empty">Раздел не найден</div></div>`;
   const relatedQs = QUESTIONS.filter(q => q.topic === t.id).length;
   return `
-    <div class="card">
+    <div class="card theory-card">
       <span class="back-link" onclick="showPage('theory')">← Все разделы</span>
       <h2>${t.title}</h2>
-      <div>${t.content}</div>
-      <div style="margin-top:20px; display:flex; gap:8px; flex-wrap:wrap;">
+      <div class="theory-content">${t.content}</div>
+      <div class="theory-actions">
         <button class="btn" onclick="showPage('practice',{practiceTopic:'${t.id}'})">
           📝 Пройти тест (${relatedQs} вопр.)
         </button>
@@ -1241,12 +1824,12 @@ function renderPracticeMenu() {
   return `
     <div class="card">
       <h2>✏️ Практика</h2>
-      <p>Выбери тему — вопросы идут вперемешку:</p>
+      <p>🎯 Выбери тему — вопросы идут вперемешку:</p>
       <div class="grid">
         ${topics.map(t => `
           <div class="topic-card" onclick="showPage('practice',{practiceTopic:'${t.id}'})">
-            <h3>${t.title}</h3>
-            <p>${t.count} вопросов</p>
+            <h3>${TOPIC_EMOJI[t.id] || '📚'} ${t.title}</h3>
+            <p>📝 ${t.count} вопросов</p>
           </div>
         `).join('')}
       </div>
